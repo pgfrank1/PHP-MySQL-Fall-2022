@@ -32,7 +32,7 @@ Create the form for the Mad Libs page
     $return_stories = mysqli_query($dbc, $retrieve_stories)
         or trigger_error("Error querying database for user stories.",
         E_USER_WARNING);
-    
+    // Print out any current Mad Libs within the database
     while($row = mysqli_fetch_assoc($return_stories))
     { ?>
         <p>
@@ -40,7 +40,6 @@ Create the form for the Mad Libs page
         </p>
         <?php
     }
-    
     if (isset($_POST['submit']))
     {
         $noun = $_POST['noun'];
@@ -48,6 +47,7 @@ Create the form for the Mad Libs page
         $adverb = $_POST['adverb'];
         $adjective = $_POST['adjective'];
 
+        // Checks to make sure the user has entered the 4 needed words.
         if (empty($noun))
         {
             echo 'You did not enter the noun.';
@@ -66,14 +66,17 @@ Create the form for the Mad Libs page
         }
         else 
         {
+            // Create the story
             $completed_story = "I like to play $adjective video games $adverb when"
             ." I am relaxing at home. Somtimes, I start to $verb because the game"
             ." has $noun.";
 
+            // Insert the 4 variables and story into the database
             $query = "INSERT INTO wordsAndStories (noun, verb, adverb, adjective,"
             . " completedStory) VALUES ('$noun', '$verb', '$adverb',"
             . " '$adjective', '$completed_story')";
             
+            // Send the data to the database
             $result = mysqli_query($dbc, $query)
             or trigger_error('Error querying database.', E_USER_WARNING);
 
