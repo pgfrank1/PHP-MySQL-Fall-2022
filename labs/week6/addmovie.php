@@ -20,7 +20,7 @@
 
                     $genres = [
                         'Action', 'Adventure', 'Comedy', 'Documentary', 'Drama',
-                        'Fantasy', 'Horror', 'Romance', 'Science Fiction'
+                        'Fantasy', 'Horror', 'Medival', 'Romance', 'Science Fiction'
                     ];
 
                     if (isset($_POST['add_movie_submission'], $_POST['movie_title'],
@@ -32,8 +32,9 @@
                         $movie_title = $_POST['movie_title'];
                         $movie_rating = $_POST['movie_rating'];
                         $movie_director = $_POST['movie_director'];
+                        $movie_release_year = $_POST['movie_release_year'];
                         $movie_runtime = $_POST['movie_running_time_in_minutes'];
-                        //$checked_movie_genres = $_POST['movie_genre_checkbox'];
+                        $checked_movie_genres = $_POST['movie_genre_checkbox'];
 
                         $movie_genre_text = "";
                         if (isset($_POST['movie_genre_checkbox']))
@@ -48,9 +49,9 @@
                                 );
                         
                         $query = "INSERT INTO movieListing (title, rating, "
-                                . " director, running_time_in_minutes, "
+                                . " director, release_year, running_time_in_minutes, "
                                 . " genre) VALUES('$movie_title', '$movie_rating', "
-                                . "'$movie_director', '$movie_runtime', "
+                                . "'$movie_director', '$movie_release_year', '$movie_runtime', "
                                 . "'$movie_genre_text')";
                         
                         mysqli_query($dbc,$query)
@@ -73,6 +74,10 @@
                                     <tr>
                                         <th scope="row">Director</th>
                                         <td><?= $movie_director?></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Release Year</th>
+                                        <td><?= $movie_release_year?></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Running Time (minutes)</th>
@@ -133,6 +138,17 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="movie_release_year" class="col-sm-3 col-form-label-lg">
+                                Release Year</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="movie_release_year"
+                                    name="movie_release_year" placeholder="Release Year" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid release year.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="movie_running_time_in_minutes" class="col-sm-3 col-form-label-lg">
                                 Running Time (min)</label>
                         <div class="col-sm-8">
@@ -187,6 +203,6 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script></body>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     </body>
 </html>
