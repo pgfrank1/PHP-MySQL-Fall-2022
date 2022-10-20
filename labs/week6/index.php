@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css" integrity="sha512-gMjQeDaELJ0ryCI+FtItusU9MkAifCZcGq789FrzkiM49D8lbDhoaUaIX4ASU187wofMNlgBJ4ckbrXM9sE6Pg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Movies I Like</title>
 </head>
 <body>
@@ -25,38 +26,43 @@
                 );
     
         // Create the database query to select the user made Mad Libs
-        $retrieve_movies = "SELECT (title, release_year) FROM movieListing";
+        $retrieve_movies = "SELECT * FROM movieListing";
     
         // Attempt to retrieve the user Mad Libs
         $return_movies = mysqli_query($dbc, $retrieve_movies)
             or trigger_error("Error querying database for user stories.",
             E_USER_WARNING);
+
+        if (mysqli_num_rows($return_movies)):
         ?>
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Movie</th>
-                    <th scope="col">Release Year</th>
-                </tr>
-                <?php
-                while($row = mysqli_fetch_assoc($return_movies))
-                { ?>
+            <table class="table table-striped">
+                <thead class="thead-dark">
                     <tr>
-                        <td><?=$row["completedStory"];?></td>
-                        <td><?=$row["completedStory"];?></td>
+                        <th class="col-sm-4" scope="col">Movie</th>
+                        <th class="col-sm-4" scope="col">Release Year</th>
+                        <th class="col-sm-1" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                while($row = mysqli_fetch_assoc($return_movies)):
+                 ?>
+                    <tr>
+                        <td><a class="nav-link" href="moviedetails.php?id=<?= $row['id'] ?>"><?= $row["title"] ?></a></td>
+                        <td><?=$row["release_year"];?></td>
+                        <td><a class="nav-link" href="removemovie.php?id_to_delete=<?= $row['id'] ?>"><i class="fas fa-trash-alt"></i></a></td>
                     </tr>
                 <?php
-                }
+                endwhile;
                 ?>
-            </thead>
-        </table>
+                </tbody>
+            </table>
         <?php
-        while($row = mysqli_fetch_assoc($return_movies))
-        {
-            ?>
-            <div>
-            <?php
-        }
+            else: 
+        ?>
+        <h3>No Movies Found</h3>
+        <?php
+            endif;   
     ?>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
