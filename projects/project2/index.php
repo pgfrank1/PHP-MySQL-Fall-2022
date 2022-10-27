@@ -42,7 +42,7 @@
                         <?php
                         $time = $row['date_posted'];
                         $date = strtotime(($time));
-                        echo date('D M d Y h:i:s A', $date);
+                        echo date('D M d Y h:i:s', $date);
                         ?>
                     </div>
                 </div>
