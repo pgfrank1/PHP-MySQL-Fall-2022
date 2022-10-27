@@ -60,7 +60,7 @@
                 </tr>
             </tbody>
             <hr>
-            <p>If you would like to change any of the detials of this movie, feel free to <a href="editmovie.php?=id_to_edit=<?= $row['id'] ?>"> edit it.</a></p>
+            <p>If you would like to change any of the detials of this movie, feel free to <a href="editmovie.php?=id_to_edit=<?= $row['id'] ?>"> edit it</a></p>
             </table>
                 <?php 
                     else:
