@@ -62,6 +62,8 @@ include('head.php');
 
             $query = "INSERT INTO BlogPosts (title, post, date_posted) VALUES ('$post_title', '$post_content', '$post_date')";
             
+            echo $post_content;
+
             mysqli_query($dbc, $query)
                 or trigger_error(
                     'Error querying database BlogPosts: Failed to insert post',

@@ -26,12 +26,9 @@
         ?>
             <div class="card  m-1 p-0">
                 <div class="card-header row mx-0">
-                    <div class="col">
+                    <div class="col-11">
                         <?=$row["title"] ?>
                     </div>
-                    <?php
-                    //if ()
-                    ?>
                     <a class="col-1" href="deletePost.php?id_to_delete=<?=$row["id"]?>"><i class="fa-sharp fa-solid fa-trash"></i></a>
                 </div>
                 <div class="card-body">
@@ -42,7 +39,7 @@
                         <?php
                         $time = $row['date_posted'];
                         $date = strtotime(($time));
-                        echo date('D M d Y h:i:s', $date);
+                        echo date('D M d Y H:i:s', $date);
                         ?>
                     </div>
                 </div>
