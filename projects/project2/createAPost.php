@@ -82,7 +82,7 @@ include('head.php');
                 </span>
                 <div class="text-center p-2">
                     <button class="btn btn-primary" type="submit" name="save_post">Add</button>
-                    <a href="#"><button class="btn btn-secondary">Go back</button></a>
+                    <button class="btn btn-secondary">Go back</button>
                 </div>    
         </form>
             
