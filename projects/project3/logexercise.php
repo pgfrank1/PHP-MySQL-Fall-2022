@@ -1,7 +1,7 @@
 <?php
     //require_once('authorize.php');
     require_once('pagetitles.php');
-    $page_title = HOME_PAGE;
+    $page_title = LOG_EXERCISE;
 ?>
 
 <!DOCTYPE html>
