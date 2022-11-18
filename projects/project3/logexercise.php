@@ -56,19 +56,20 @@
             $today = date("Y-m-d");
             // Age outputs correctly
             $age = date_diff(date_create($birthdate), date_create($today));
+            $age = $age->format('%y');
 
             switch($gender) {
                 case "m": // ((-55.0969 + (0.6309 * HR) + (0.090174 * W) + (0.2017 * A)) / 4.184) * T
-                    //$calories = ((-55.0969 +(0.6309 * $heartrate) + (0.090174 * $weight) + (0.2017 * )) / 4.184) * T
-                    echo "m";
+                    $calories = round(((-55.0969 +(0.6309 * $heartrate) + (0.090174 * $weight) + (0.2017 * $age)) / 4.184) * $time_in_minutes);
+                    echo $calories;
                     break;
-                    // no break
                 case "f": // ((-20.4022 + (0.4472 * HR) – (0.057288 * W) + (0.074 * A)) / 4.184) * T
-                    echo "f";
+                    $calories = round(((-55.0969 +(0.6309 * $heartrate) + (0.090174 * $weight) + (0.2017 * $age)) / 4.184) * $time_in_minutes);
+                    echo $calories;
                     break;
-                    // no break
                 case "nb": // ((-37.7495 + (0.5391 * HR) + (0.01644 * W) + (0.1379 * A)) / 4.184) * T
-                    echo "nb";
+                    $calories = round(((-55.0969 +(0.6309 * $heartrate) + (0.090174 * $weight) + (0.2017 * $age)) / 4.184) * $time_in_minutes);
+                    echo $calories;
                     break;
             }
         /*$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
@@ -83,6 +84,7 @@
     }
     if (!isset($_POST['add_exercise']))
     {
+        echo $_SESSION['user_name'];
 ?>
     <form class="needs-validation bg-light d-flex flex-column justify-content-center" novalidate method="POST"
         action="<?= $_SERVER['PHP_SELF']?>">
