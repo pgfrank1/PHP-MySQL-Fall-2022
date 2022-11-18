@@ -1,9 +1,12 @@
 <?php
     //require_once('authorize.php');
+    session_start();
     require_once('pagetitles.php');
     $page_title = VIEW_PROFILE;
-?>
-
+    if (empty($_SESSION['user_id'])) {
+        header('Location: login.php');
+    }
+?>   
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,6 +24,9 @@
     require_once('navmenu.php');
 ?>
     <h1 class="pt-3 text-center"><?= $page_title ?></h1>
+
+    <?php echo htmlspecialchars($_SESSION['user_name']);?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
     </script>

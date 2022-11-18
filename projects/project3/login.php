@@ -52,6 +52,8 @@
                         $_SESSION['user_name'] = $row['username'];
                         $_SESSION['first_name'] = $row['first_name'];
                         $_SESSION['last_name'] = $row['last_name'];
+                        //setcookie('user_id', $row['id']);
+                        //setcookie('user_name', $row['username'], time() + 3600);
 
                         // Redirect to the home page
                         $home_url = dirname($_SERVER['PHP_SELF']);
