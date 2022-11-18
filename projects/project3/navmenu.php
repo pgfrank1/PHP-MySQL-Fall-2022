@@ -11,6 +11,9 @@
             <a href="createuser.php">
                 <input class="btn bg-primary text-light" type="button" value="Create User">
             </a>
+            <a href="login.php">
+                <input class="btn bg-primary text-light" type="button" value="Login">
+            </a>
         </div>
     </div>
 </nav>

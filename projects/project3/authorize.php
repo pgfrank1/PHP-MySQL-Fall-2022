@@ -11,7 +11,7 @@ if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])
 {
 
     header('HTTP/1.1 401 Unauthorized');
-    header('WWW-Authenticate: Basic realm="Project 3 Exercise Log"');
+    header('WWW-Authenticate: Basic realm="Project 2 Blog"');
     $invalid_response = "<h4>You must enter a "
                         . "valid username and password to access this page.</h4>"
                         . "<a href='index.php'>Go back</a>";

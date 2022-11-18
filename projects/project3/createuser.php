@@ -1,5 +1,5 @@
 <?php
-    require_once('authorize.php');
+    //require_once('authorize.php');
     require_once('pagetitles.php');
     $page_title = CREATE_USER;
 ?>
@@ -32,21 +32,56 @@
             <label class="form-label" for="username">Username</label>
             <input type="text" name="username" id="username" required>
             <div class="invalid-feedback">
-                Please provide a title.
+                Please provide a username.
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="form-label" for="first_name">First Name</label>
+            <input type="text" name="first_name" id="first_name" required>
+            <div class="invalid-feedback">
+                Please provide a First Name.
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="form-label" for="last_name">Last Name</label>
+            <input type="text" name="last_name" id="last_name" required>
+            <div class="invalid-feedback">
+                Please provide a Last Name.
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="form-label" for="gender">Gender</label>
+            <input type="text" name="gender" id="gender" required>
+            <div class="invalid-feedback">
+                Please provide a Gender.
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="form-label" for="birthdate">Birthdate</label>
+            <input type="text" name="birthdate" id="birthdate" required>
+            <div class="invalid-feedback">
+                Please provide a Birthdate.
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="form-label" for="weight">Weight</label>
+            <input type="text" name="weight" id="weight" required>
+            <div class="invalid-feedback">
+                Please provide a Weight.
             </div>
         </div>
         <div class="form-group row">
             <label class="form-label" for="password">Password</label>
             <input type="password" name="password" id="password" required>
             <div class="invalid-feedback">
-                Please provide a title.
+                Please provide a password.
             </div>
         </div>
         <div class="form-group row">
             <label class="form-label" for="verify_password">Verify Password</label>
             <input type="password" name="verify_password" id="verify_password" required>
             <div class="invalid-feedback">
-                Please provide a title.
+                Please verify your password.
             </div>
         </div>
         <div class="pt-4 text-center">
@@ -58,27 +93,49 @@
     }
     if (isset($_POST['create_user']))
     {
+        $username = $_POST['username'];
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $gender = $_POST['gender'];
+        $birthdate = $_POST['birthdate'];
+        $weight = (int) $_POST['weight'];
 
         require_once("dbconnection.php");
+        require_once("queryutils.php");
 
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
             or trigger_error("There was an error attempting to connect to the database.", E_USER_ERROR);
 
-        $query = "SELECT * FROM users ORDER BY id DESC";
+        $query = "SELECT username FROM exercise_user WHERE username = ?";
 
-        $result = mysqli_query($dbc, $query)
-            or trigger_error("There was an issue while querying the database", E_USER_ERROR);
+        $result = parameterizedQuery($dbc, $query, 's', $username)
+                or trigger_error(mysqli_error($dbc), E_USER_ERROR);
 
-        if (mysqli_num_rows($result)) 
+        if (mysqli_num_rows($result) == 0) 
         {
-            while($row = mysqli_fetch_assoc($result))
+            if ($_POST['password'] == $_POST['verify_password'])
             {
-                if ($row['username'] == $_POST['username']) 
-                {
-?>                  <h1>User already exists. Please try a new username</h1>
-                <?php
-                }
+                $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                
+                $query = "INSERT INTO exercise_user ( `first_name`, `last_name`, `gender`, `birthdate`, `weight`, `username`, `hash_password`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            
+                $result = parameterizedQuery($dbc, $query, 'ssssiss', $first_name, $last_name, $gender, $birthdate, $weight, $username, $hashed_password)
+                        or trigger_error(mysqli_error($dbc), E_USER_ERROR);
+
             }
+            else
+            {
+?>
+    <h1 class="text-danger">Passwords do not match, please try again. <a href="./createuser.php">Go Back</a></h1>
+    <?php
+            }
+        }
+        else
+        {
+?>
+    <h1 class="text-danger">Username already exists, please try another username. <a href="./createuser.php">Go Back</a>
+    </h1>
+    <?php
         }
     }
 ?>

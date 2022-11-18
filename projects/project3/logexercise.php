@@ -16,7 +16,7 @@
     <title><?= $page_title ?></title>
 </head>
 
-<body>
+<body class="container">
     <?php
     require_once('navmenu.php');
 ?>
