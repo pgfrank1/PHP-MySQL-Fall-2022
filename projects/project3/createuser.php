@@ -51,14 +51,18 @@
         </div>
         <div class="form-group row">
             <label class="form-label" for="gender">Gender</label>
-            <input type="text" name="gender" id="gender" required>
+            <select class="form-select" name="gender" id="gender" required>
+                <option selected value="">Select a gender</option>
+                <option value="m">Male</option>
+                <option value="f">Female</option>
+            </select>
             <div class="invalid-feedback">
                 Please provide a Gender.
             </div>
         </div>
         <div class="form-group row">
             <label class="form-label" for="birthdate">Birthdate</label>
-            <input type="text" name="birthdate" id="birthdate" required>
+            <input type="date" name="birthdate" id="birthdate" required>
             <div class="invalid-feedback">
                 Please provide a Birthdate.
             </div>

@@ -71,15 +71,11 @@
                         . "<span class='font-weight-bold'> ($user_name)</span>. "
                         . "Please use a different user name.</p></h4><hr/>";
                 }
-                else
-                {
-                    echo "<h4><p class='text-danger'>Something went terribly wrong!</p></h4><hr/>";
-                }
             }
             else
             {
                 // Output error message
-                echo "<h4><p class='text-danger'>You must enter both a user name and password.</p></h4><hr/>";
+                echo "<h4><p class='text-danger'>You must enter a user name and password.</p></h4><hr/>";
             }
         }
         if (empty($_SESSION['user_id'])):
