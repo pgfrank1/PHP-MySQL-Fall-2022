@@ -55,6 +55,7 @@
                 <option selected value="">Select a gender</option>
                 <option value="m">Male</option>
                 <option value="f">Female</option>
+                <option value="nb">Non Binary</option>
             </select>
             <div class="invalid-feedback">
                 Please provide a Gender.

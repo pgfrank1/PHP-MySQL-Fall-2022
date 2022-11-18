@@ -32,21 +32,49 @@
         $exercise_type = $_POST['exercise_type'];
         $time_in_minutes = $_POST['time_in_minutes'];
         $heartrate = $_POST['heartrate'];
-        $calories = $_POST['calories'];
         $userid = $_SESSION['user_id'];
 
         require_once("dbconnection.php");
         require_once("queryutils.php");
 
+        $query = "SELECT * FROM exercise_user WHERE id = ?"; // Weight and Gender
+
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
             or trigger_error("There was an error attempting to connect to the database.", E_USER_ERROR);
+
+        $result = parameterizedQuery($dbc, $query, 'i', $userid)
+                        or trigger_error(mysqli_error($dbc), E_USER_ERROR);
+                        
+        if (mysqli_num_rows($result) == 1)
+        {
+            $row = mysqli_fetch_array($result);
+
+            $gender = $row['gender'];
+            $weight = $row['weight'];
+            $birthdate = $row['birthdate'];
+
+            $today = date("Y-m-d");
+            $age = date_diff(date_create($birthdate), date_create($today));
+
+            echo 'age is: ' .$age->format('%y');
+
+
+            /*switch($gender):
+                case "m": // ((-55.0969 + (0.6309 * HR) + (0.090174 * W) + (0.2017 * A)) / 4.184) * T
+                    $calories = ((-55.0969 +(0.6309 * $heartrate) + (0.090174 * $weight) + (0.2017 * )) / 4.184) * T
+                case "f": // ((-20.4022 + (0.4472 * HR) – (0.057288 * W) + (0.074 * A)) / 4.184) * T
+                case "nb": // ((-37.7495 + (0.5391 * HR) + (0.01644 * W) + (0.1379 * A)) / 4.184) * T
+      
+        $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
+                or trigger_error("There was an error attempting to connect to the database.", E_USER_ERROR);
 
         $query = "INSERT INTO exercise_log (`user_id`, `date`, exercise_type, time_in_minutes, heartrate, calories) VALUES (?, ?, ?, ?, ?, ?)";
 
         $result = parameterizedQuery($dbc, $query, 'issiii', $userid, $date, $exercise_type, $time_in_minutes, $heartrate, $calories)
                 or trigger_error(mysqli_error($dbc), E_USER_ERROR);
+*/  
+        }
     }
-
     if (!isset($_POST['add_exercise']))
     {
 ?>
