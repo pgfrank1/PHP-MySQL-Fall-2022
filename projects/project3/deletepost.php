@@ -9,13 +9,20 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<?php  
-    include('head.php');
-?>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <title><?= $page_title ?></title>
+</head>
 <body>
     <div class="container">
-    <?php 
+    <?php
+
         require_once("dbconnection.php");
+        require_once('queryutils.php');
 
         include('nav.php');
 
@@ -26,14 +33,12 @@
             $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
                 or trigger_error("There was an error attempting to connect to the database.", E_USER_ERROR);
 
-            $query = "DELETE FROM BlogPosts WHERE id = $id";
+            $query = "DELETE FROM exercise_log WHERE id = ?";
 
-            $result = mysqli_query($dbc, $query)
-                or trigger_error(
-                    'Error querying database BlogPosts: Failed to delete post',
-                    E_USER_ERROR
-                );
-            header('Location: index.php');
+            $result = parameterizedQuery($dbc, $query, 'i', $id)
+                    or trigger_error(mysqli_error($dbc), E_USER_ERROR);
+            
+            header('Location: viewprofile.php');
             exit;
         }
         else
@@ -41,13 +46,10 @@
             $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
                 or trigger_error("There was an error attempting to connect to the database.", E_USER_ERROR);
 
-            $query = "SELECT * FROM BlogPosts WHERE id = $id";
+            $query = "SELECT * FROM exercise_log WHERE id = ?";
 
-            $result = mysqli_query($dbc, $query)
-                or trigger_error(
-                    'Error querying database BlogPosts: Failed to insert post',
-                    E_USER_ERROR
-                );
+            $result = parameterizedQuery($dbc, $query, 'i', $id)
+                    or trigger_error(mysqli_error($dbc), E_USER_ERROR);
 
             if (mysqli_num_rows($result) == 1)
             {
@@ -57,12 +59,12 @@
                 <div class="card  m-1 p-0">
                     <div class="card-header row mx-0">
                         <div class="col">
-                            <?= $row["title"] ?>
+                            <?= $row["exercise_type"] ?>
                         </div>
                     </div>
                     <div class="card-body">
                     <p>
-                        <?=$row["post"]?>
+                        <?=$row["time_in_minutes"]?>
                     </p>
                     </div>
                     <div class="fs-6 p-2 fst-italic text-muted text-end">

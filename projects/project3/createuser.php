@@ -22,7 +22,15 @@
 ?>
 
     <h1 class="pt-3 text-center"><?= $page_title ?></h1>
+    <hr>
     <?php
+    $username = "";
+    $first_name =  "";
+    $last_name =  "";
+    $gender =  "";
+    $birthdate =  "";
+    $weight = "";
+
     if (!isset($_POST['create_user']))
     {
 ?>
@@ -30,28 +38,28 @@
         action="<?= $_SERVER['PHP_SELF']?>">
         <div class="form-group row">
             <label class="form-label" for="username">Username</label>
-            <input type="text" name="username" id="username" required>
+            <input type="text" name="username" id="username" value="<?= $username ?>" required>
             <div class="invalid-feedback">
                 Please provide a username.
             </div>
         </div>
         <div class="form-group row">
             <label class="form-label" for="first_name">First Name</label>
-            <input type="text" name="first_name" id="first_name" required>
+            <input type="text" name="first_name" id="first_name"  value="<?= $first_name ?>" required>
             <div class="invalid-feedback">
                 Please provide a First Name.
             </div>
         </div>
         <div class="form-group row">
             <label class="form-label" for="last_name">Last Name</label>
-            <input type="text" name="last_name" id="last_name" required>
+            <input type="text" name="last_name" id="last_name" value="<?= $last_name ?>" required>
             <div class="invalid-feedback">
                 Please provide a Last Name.
             </div>
         </div>
         <div class="form-group row">
             <label class="form-label" for="gender">Gender</label>
-            <select class="form-select" name="gender" id="gender" required>
+            <select class="form-select" name="gender" id="gender" value="<?= $gender ?>" required>
                 <option selected value="">Select a gender</option>
                 <option value="m">Male</option>
                 <option value="f">Female</option>
@@ -63,14 +71,14 @@
         </div>
         <div class="form-group row">
             <label class="form-label" for="birthdate">Birthdate</label>
-            <input type="date" name="birthdate" id="birthdate" required>
+            <input type="date" name="birthdate" id="birthdate" value="<?= $birthdate ?>" required>
             <div class="invalid-feedback">
                 Please provide a Birthdate.
             </div>
         </div>
         <div class="form-group row">
             <label class="form-label" for="weight">Weight</label>
-            <input type="text" name="weight" id="weight" required>
+            <input type="text" name="weight" id="weight" value="<?= $weight ?>" required>
             <div class="invalid-feedback">
                 Please provide a Weight.
             </div>
@@ -96,6 +104,7 @@
     </form>
     <?php
     }
+
     if (isset($_POST['create_user']))
     {
         $username = $_POST['username'];

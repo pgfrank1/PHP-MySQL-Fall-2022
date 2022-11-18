@@ -25,7 +25,15 @@
     require_once('navmenu.php');
 ?>
     <h1 class="pt-3 text-center"><?= $page_title ?></h1>
+    <hr>
     <?php
+
+    $date = "";
+    $exercise_type = "";
+    $time_in_minutes = "";
+    $heartrate = "";
+    $userid = "";
+    
     if (isset($_POST['add_exercise']))
     {
         $date = $_POST['date'];
@@ -60,15 +68,12 @@
             switch($gender) {
                 case "m": // ((-55.0969 + (0.6309 * HR) + (0.090174 * W) + (0.2017 * A)) / 4.184) * T
                     $calories = round(((-55.0969 +(0.6309 * $heartrate) + (0.090174 * $weight) + (0.2017 * $age)) / 4.184) * $time_in_minutes);
-                    echo $calories;
                     break;
                 case "f": // ((-20.4022 + (0.4472 * HR) – (0.057288 * W) + (0.074 * A)) / 4.184) * T
                     $calories = round(((-20.4022 +(0.4472 * $heartrate) + (0.057288 * $weight) + (0.074 * $age)) / 4.184) * $time_in_minutes);
-                    echo $calories;
                     break;
                 case "nb": // ((-37.7495 + (0.5391 * HR) + (0.01644 * W) + (0.1379 * A)) / 4.184) * T
                     $calories = round(((-37.7495 +(0.5391 * $heartrate) + (0.01644 * $weight) + (0.1379 * $age)) / 4.184) * $time_in_minutes);
-                    echo $calories;
                     break;
             }
             $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
@@ -79,23 +84,23 @@
             $result = parameterizedQuery($dbc, $query, 'issiii', $userid, $date, $exercise_type, $time_in_minutes, $heartrate, $calories)
                     or trigger_error(mysqli_error($dbc), E_USER_ERROR);
         }
+        header('Location: viewprofile.php');
     }
     if (!isset($_POST['add_exercise']))
     {
-        echo $_SESSION['user_name'];
 ?>
     <form class="needs-validation bg-light d-flex flex-column justify-content-center" novalidate method="POST"
         action="<?= $_SERVER['PHP_SELF']?>">
         <div class="form-group p-3 row">
             <label class="form-label" for="date">Date</label>
-            <input type="date" name="date" id="date" required>
+            <input type="date" name="date" id="date" value="<?= $date ?>" required>
             <span class="invalid-feedback">
                 Please enter the date you exercised.
             </span>
         </div>
         <div class="form-group p-3 row">
             <label class="form-label" for="exercise_type">Exercise Type</label>
-            <select class="form-select" name="exercise_type" id="exercise_type" required>
+            <select class="form-select" name="exercise_type" id="exercise_type" value="<?= $exercise_type ?>"  required>
                 <option selected value="">Choose an exercise</option>
                 <option value="running">Running</option>
                 <option value="walking">Walking</option>
@@ -105,22 +110,18 @@
         </div>
         <div class="form-group p-3 row">
             <label class="form-label" for="time_in_minutes">Time Exercised in Minutes</label>
-            <input type="time_in_minutes" name="time_in_minutes" id="time_in_minutes" required>
+            <input type="time_in_minutes" name="time_in_minutes" id="time_in_minutes" value="<?= $time_in_minutes ?>" required>
             <span class="invalid-feedback">
                 Please enter the time exercised in minutes
             </span>
         </div>
         <div class="form-group p-3 row">
             <label class="form-label" for="heartrate">Heart Rate</label>
-            <input type="heartrate" name="heartrate" id="heartrate" required>
+            <input type="heartrate" name="heartrate" id="heartrate" value="<?= $heartrate ?>"  required>
             <span class="invalid-feedback">
                 Please enter your heart rate
             </span>
         </div>
-        <!--<div class="form-group p-3 row">
-            <label class="form-label" for="calories">Calories</label>
-            <input type="calories" name="calories" id="calories">
-        </div>-->
         <div class="pt-4 text-center">
             <button class="btn btn-primary" type="submit" name="add_exercise">Submit</button>
             <button class="btn btn-danger" type="reset">Reset</button>

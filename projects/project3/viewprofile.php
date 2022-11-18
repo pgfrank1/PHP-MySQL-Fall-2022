@@ -24,6 +24,7 @@
     require_once('navmenu.php');
 ?>
     <h1 class="pt-3 text-center"><?= $page_title ?></h1>
+    <hr>
     <?php
     require_once("dbconnection.php");
     require_once("queryutils.php");
@@ -77,6 +78,7 @@
                 </p>
                 <p>Birthdate: <?= $birthdate ?></p>
                 <p>Weight: <?= $weight ?> lbs</p>
+                <a href="editprofile.php">Edit Profile</a>
             </div>
         </div>
         <span class="col-1"></span>
