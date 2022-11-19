@@ -102,14 +102,37 @@ CREATE TABLE `exercise_log` (
   CONSTRAINT `exercise_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `exercise_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `exercise_log` (`id`, `user_id`, `date`, `exercise_type`, `time_in_minutes`, `heartrate`, `calories`) VALUES
+(2,	7,	'2022-11-17',	'Running',	55,	140,	699),
+(3,	6,	'2022-11-01',	'Weightlifting',	30,	140,	410),
+(4,	6,	'2022-11-05',	'Other',	30,	150,	455),
+(5,	6,	'2020-09-01',	'Walking',	50,	111,	464),
+(7,	8,	'2022-11-22',	'Running',	44,	342,	1900),
+(8,	8,	'2022-11-19',	'Walking',	33,	123,	493),
+(9,	8,	'2022-11-17',	'Weightlifting',	123,	123,	1839),
+(10,	8,	'2022-11-18',	'Weightlifting',	1233,	1245,	196689),
+(11,	8,	'2022-11-22',	'Running',	44,	342,	1900),
+(12,	8,	'2022-11-19',	'Walking',	33,	123,	493),
+(13,	8,	'2022-11-17',	'Weightlifting',	123,	123,	1839),
+(14,	8,	'2022-11-18',	'Weightlifting',	1233,	1245,	196689),
+(18,	8,	'2022-11-22',	'Running',	44,	342,	1900),
+(19,	8,	'2022-11-19',	'Walking',	33,	123,	493),
+(20,	8,	'2022-11-17',	'Weightlifting',	123,	123,	1839),
+(21,	8,	'2022-11-18',	'Weightlifting',	1233,	1245,	196689),
+(22,	8,	'2022-11-22',	'Running',	44,	342,	1900),
+(23,	8,	'2022-11-19',	'Walking',	33,	123,	493),
+(24,	8,	'2022-11-17',	'Weightlifting',	123,	123,	1839),
+(25,	8,	'2022-11-05',	'Running',	111,	111,	1488),
+(26,	9,	'2022-11-19',	'Running',	60,	145,	955),
+(27,	10,	'2022-11-02',	'Weightlifting',	45,	135,	523);
 
 DROP TABLE IF EXISTS `exercise_user`;
 CREATE TABLE `exercise_user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `first_name` varchar(128) NOT NULL,
   `last_name` varchar(128) NOT NULL,
-  `gender` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `birthdate` varchar(128) NOT NULL,
+  `gender` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `birthdate` date NOT NULL,
   `weight` int NOT NULL,
   `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `hash_password` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -117,9 +140,11 @@ CREATE TABLE `exercise_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `exercise_user` (`id`, `first_name`, `last_name`, `gender`, `birthdate`, `weight`, `username`, `hash_password`) VALUES
-(1,	'test',	'test',	'test',	'test',	2,	'student',	'$2y$10$NoA0drgg908n9uZFvG7fFOmAb9fPv2c4xKfbkIm7Po/EDhyMEf1Ki'),
-(2,	'Patrick',	'Frank',	'M',	'10/08/1995',	205,	'test2',	'$2y$10$Pn24/hMKYgw0fQwm/XWKPOAxwdPA/LlaxNwndpV8X0Md1TFtjMdmm'),
-(3,	'test',	'test',	't',	't',	0,	'<login>     <username><User>SELECT * from userstable</username>     <password>*</password> </login>',	'$2y$10$8a1Bh166dv4s12C.c.AXmOBG/4ZJEqixEVjonQWKUJSzyH0ls7RhW');
+(6,	'Patrick',	'Frank',	'm',	'1995-11-08',	205,	'test',	'$2y$10$XHnq2fiJCmWJvELQeHdTxui/P74ciBd16wCsI3vKALJT.abb5h4LK'),
+(7,	'Mark',	'Frank',	'm',	'1990-10-08',	150,	'student',	'$2y$10$6duBjryvbJ580q53aUG6PuupmSgoYJi1sMM9redpNFiaaWCDShriK'),
+(8,	'Roger2',	'Fran2k',	'nb',	'1990-11-11',	1800,	'testingnb',	'$2y$10$37gAbeQcq4n9vDTLJJVC0.ogW3YHWQpRs72eJopuJMYj0oWcj8zsS'),
+(9,	'Final',	'Version',	'm',	'1995-10-08',	275,	'finalversion',	'$2y$10$nDca7/31RwstuSyDfRO1M.12OAs/yLZyASNNaxIjfHKQ1pqVX6.em'),
+(10,	'e',	'e',	'f',	'2002-11-18',	125,	'testt',	'$2y$10$msllnmIgHIUPsXBwzfvFbuj3LBDIs0.hJlqoTZQOu5LxDqVIfM4J2');
 
 CREATE DATABASE `mysql` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `mysql`;
@@ -4228,16 +4253,19 @@ INSERT INTO `innodb_index_stats` (`database_name`, `table_name`, `index_name`, `
 ('PROJECT2',	'BlogPosts',	'PRIMARY',	'2022-11-08 01:53:02',	'n_diff_pfx01',	11,	1,	'id'),
 ('PROJECT2',	'BlogPosts',	'PRIMARY',	'2022-11-08 01:53:02',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
 ('PROJECT2',	'BlogPosts',	'PRIMARY',	'2022-11-08 01:53:02',	'size',	1,	NULL,	'Number of pages in the index'),
-('PROJECT3',	'exercise_log',	'PRIMARY',	'2022-11-16 22:05:11',	'n_diff_pfx01',	0,	1,	'id'),
-('PROJECT3',	'exercise_log',	'PRIMARY',	'2022-11-16 22:05:11',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('PROJECT3',	'exercise_log',	'PRIMARY',	'2022-11-16 22:05:11',	'size',	1,	NULL,	'Number of pages in the index'),
-('PROJECT3',	'exercise_log',	'user_id',	'2022-11-16 22:05:11',	'n_diff_pfx01',	0,	1,	'user_id'),
-('PROJECT3',	'exercise_log',	'user_id',	'2022-11-16 22:05:11',	'n_diff_pfx02',	0,	1,	'user_id,id'),
-('PROJECT3',	'exercise_log',	'user_id',	'2022-11-16 22:05:11',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('PROJECT3',	'exercise_log',	'user_id',	'2022-11-16 22:05:11',	'size',	1,	NULL,	'Number of pages in the index'),
-('PROJECT3',	'exercise_user',	'PRIMARY',	'2022-11-18 00:50:29',	'n_diff_pfx01',	2,	1,	'id'),
-('PROJECT3',	'exercise_user',	'PRIMARY',	'2022-11-18 00:50:29',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
-('PROJECT3',	'exercise_user',	'PRIMARY',	'2022-11-18 00:50:29',	'size',	1,	NULL,	'Number of pages in the index'),
+('PROJECT3',	'#sql-493_17a',	'PRIMARY',	'2022-11-18 04:48:22',	'n_diff_pfx01',	0,	1,	'id'),
+('PROJECT3',	'#sql-493_17a',	'PRIMARY',	'2022-11-18 04:48:22',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('PROJECT3',	'#sql-493_17a',	'PRIMARY',	'2022-11-18 04:48:22',	'size',	1,	NULL,	'Number of pages in the index'),
+('PROJECT3',	'exercise_log',	'PRIMARY',	'2022-11-18 23:44:44',	'n_diff_pfx01',	19,	1,	'id'),
+('PROJECT3',	'exercise_log',	'PRIMARY',	'2022-11-18 23:44:44',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('PROJECT3',	'exercise_log',	'PRIMARY',	'2022-11-18 23:44:44',	'size',	1,	NULL,	'Number of pages in the index'),
+('PROJECT3',	'exercise_log',	'user_id',	'2022-11-18 23:44:44',	'n_diff_pfx01',	3,	1,	'user_id'),
+('PROJECT3',	'exercise_log',	'user_id',	'2022-11-18 23:44:44',	'n_diff_pfx02',	19,	1,	'user_id,id'),
+('PROJECT3',	'exercise_log',	'user_id',	'2022-11-18 23:44:44',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('PROJECT3',	'exercise_log',	'user_id',	'2022-11-18 23:44:44',	'size',	1,	NULL,	'Number of pages in the index'),
+('PROJECT3',	'exercise_user',	'PRIMARY',	'2022-11-18 23:55:28',	'n_diff_pfx01',	4,	1,	'id'),
+('PROJECT3',	'exercise_user',	'PRIMARY',	'2022-11-18 23:55:28',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
+('PROJECT3',	'exercise_user',	'PRIMARY',	'2022-11-18 23:55:28',	'size',	1,	NULL,	'Number of pages in the index'),
 ('mysql',	'component',	'PRIMARY',	'2022-11-08 01:52:41',	'n_diff_pfx01',	0,	1,	'component_id'),
 ('mysql',	'component',	'PRIMARY',	'2022-11-08 01:52:41',	'n_leaf_pages',	1,	NULL,	'Number of leaf pages in the index'),
 ('mysql',	'component',	'PRIMARY',	'2022-11-08 01:52:41',	'size',	1,	NULL,	'Number of pages in the index'),
@@ -4534,8 +4562,9 @@ INSERT INTO `innodb_table_stats` (`database_name`, `table_name`, `last_update`, 
 ('MadLibs',	'wordsAndStories',	'2022-11-08 01:52:41',	3,	1,	0),
 ('Movies',	'movieListing',	'2022-11-08 01:52:41',	0,	1,	0),
 ('PROJECT2',	'BlogPosts',	'2022-11-08 01:53:02',	11,	1,	0),
-('PROJECT3',	'exercise_log',	'2022-11-16 22:05:11',	0,	1,	1),
-('PROJECT3',	'exercise_user',	'2022-11-18 00:50:29',	2,	1,	0),
+('PROJECT3',	'#sql-493_17a',	'2022-11-18 04:48:22',	0,	1,	0),
+('PROJECT3',	'exercise_log',	'2022-11-18 23:44:44',	19,	1,	1),
+('PROJECT3',	'exercise_user',	'2022-11-18 23:55:28',	4,	1,	0),
 ('mysql',	'component',	'2022-11-08 01:52:41',	0,	1,	0),
 ('northwind',	'customers',	'2022-11-08 01:52:41',	29,	1,	6),
 ('northwind',	'employee_privileges',	'2022-11-08 01:52:41',	0,	1,	3),
@@ -9699,5 +9728,4 @@ CREATE ALGORITHM=MERGE DEFINER=`mysql.sys`@`localhost` SQL SECURITY INVOKER VIEW
 DROP TABLE IF EXISTS `x$waits_global_by_latency`;
 CREATE ALGORITHM=MERGE DEFINER=`mysql.sys`@`localhost` SQL SECURITY INVOKER VIEW `x$waits_global_by_latency` (`events`,`total`,`total_latency`,`avg_latency`,`max_latency`) AS select `performance_schema`.`events_waits_summary_global_by_event_name`.`EVENT_NAME` AS `event`,`performance_schema`.`events_waits_summary_global_by_event_name`.`COUNT_STAR` AS `total`,`performance_schema`.`events_waits_summary_global_by_event_name`.`SUM_TIMER_WAIT` AS `total_latency`,`performance_schema`.`events_waits_summary_global_by_event_name`.`AVG_TIMER_WAIT` AS `avg_latency`,`performance_schema`.`events_waits_summary_global_by_event_name`.`MAX_TIMER_WAIT` AS `max_latency` from `performance_schema`.`events_waits_summary_global_by_event_name` where ((`performance_schema`.`events_waits_summary_global_by_event_name`.`EVENT_NAME` <> 'idle') and (`performance_schema`.`events_waits_summary_global_by_event_name`.`SUM_TIMER_WAIT` > 0)) order by `performance_schema`.`events_waits_summary_global_by_event_name`.`SUM_TIMER_WAIT` desc;
 
--- 2022-11-18 02:21:16
-
+-- 2022-11-19 00:06:32

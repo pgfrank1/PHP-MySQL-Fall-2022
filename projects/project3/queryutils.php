@@ -1,5 +1,5 @@
-<?php
 
+<?php
 function parameterizedQuery($dbc, $query, $data_types, ...$query_parameters)
 {
     $validated = false;

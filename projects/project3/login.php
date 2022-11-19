@@ -62,9 +62,7 @@
                         //setcookie('user_id', $row['id']);
                         //setcookie('user_name', $row['username'], time() + 3600);
 
-                        // Redirect to the home page
-                        $home_url = dirname($_SERVER['PHP_SELF']);
-                        header('Location: ' . $home_url);
+                        header("Location: viewprofile.php");
                     }
                     else
                     {

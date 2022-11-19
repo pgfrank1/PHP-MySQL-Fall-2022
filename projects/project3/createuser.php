@@ -136,6 +136,8 @@
                 $result = parameterizedQuery($dbc, $query, 'ssssiss', $first_name, $last_name, $gender, $birthdate, $weight, $username, $hashed_password)
                         or trigger_error(mysqli_error($dbc), E_USER_ERROR);
 
+                header("Location: viewprofile.php");
+
             }
             else
             {

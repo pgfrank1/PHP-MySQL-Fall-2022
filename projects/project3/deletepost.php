@@ -55,24 +55,26 @@
             {
                 $row = mysqli_fetch_assoc($result);
                 ?>
-                <h3 class="p-1 text-center">Delete this post?</h3>
+                <h3 class="p-1 text-center">Delete this exercise post?</h3>
                 <div class="card  m-1 p-0">
                     <div class="card-header row mx-0">
-                        <div class="col">
+                        <h3 class="col">
                             <?= $row["exercise_type"] ?>
-                        </div>
+                        </h3>
                     </div>
                     <div class="card-body">
                     <p>
-                        <?=$row["time_in_minutes"]?>
+                        Date: <?=$row["date"]?>
                     </p>
-                    </div>
-                    <div class="fs-6 p-2 fst-italic text-muted text-end">
-                        <?php
-                        $time = $row['date_posted'];
-                        $date = strtotime(($time));
-                        echo date('D M d Y h:i:s A', $date);
-                        ?>
+                    <p>
+                        Exercise Duration: <?=$row['time_in_minutes']?> min
+                    </p>
+                    <p>
+                        Heart Rate: <?= $row['heartrate'] ?> bpm
+                    </p>
+                    <p>
+                        Calories Used: <?= $row['calories']?>
+                    </p>
                     </div>
                 </div>
                 <form class="needs-validation" novalidate method="POST"

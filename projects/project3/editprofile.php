@@ -1,5 +1,5 @@
 <?php
-    //require_once('authorize.php');
+    require_once('authorize.php');
     session_start();
     require_once('pagetitles.php');
     $page_title = EDIT_PROFILE;
@@ -23,11 +23,42 @@
 <body class="container">
     <?php
     require_once('navmenu.php');
+    
 ?>
     <h1 class="pt-3 text-center"><?= $page_title ?></h1>
     <hr>
 
     <?php
+        if (isset($_POST['submit_profile_edit']))
+        {
+            $first_name = $_POST['first_name'];
+            $last_name = $_POST['last_name'];
+            $gender = $_POST['gender'];
+            $birthdate = $_POST['birthdate'];
+            $weight = $_POST['weight'];
+            $id = $_SESSION['user_id'];
+
+            require_once("dbconnection.php");
+            require_once("queryutils.php");
+            
+            echo $_SESSION['user_id'];
+
+            $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
+                or trigger_error("There was an error attempting to connect to the database.", E_USER_ERROR);
+            
+            echo $_SESSION['user_id'];
+
+            $query = "UPDATE exercise_user SET first_name = ?, last_name = ?, gender = ?, birthdate = ?, `weight` = ?  WHERE id = ?";
+
+            echo $_SESSION['user_id'];
+
+            $result = parameterizedQuery($dbc, $query, 'ssssii', $first_name, $last_name, $gender, $birthdate, $weight, $id)
+                   or trigger_error(mysqli_error($dbc), E_USER_ERROR);
+
+            echo $_SESSION['user_id'];
+            
+            header('Location: viewprofile.php');
+        }
         if (!isset($_POST['submit_profile_edit']))
         {
             require_once("dbconnection.php");
@@ -74,9 +105,6 @@
                 <option value="f"<?php if($gender == 'f'): ?> selected="selected" <?php endif;?>>Female</option>
                 <option value="nb"<?php if($gender == 'nb'): ?> selected="selected" <?php endif;?>>Non Binary</option>
             </select>
-            <div class="invalid-feedback">
-                Please provide a Gender.
-            </div>
         </div>
         <div class="form-group row">
             <label class="form-label" for="birthdate">Birthdate</label>
@@ -104,27 +132,6 @@
     <h1>There was an error trying to find the user</h1>
     <?php    
             }
-        }
-        if (isset($_POST['submit_profile_edit']))
-        {
-            $first_name = $_POST['first_name'];
-            $last_name = $_POST['last_name'];
-            $gender = $_POST['gender'];
-            $birthdate = $_POST['birthdate'];
-            $weight = $_POST['weight'];
-            
-            //echo $first_name;
-
-            require_once("dbconnection.php");
-            require_once("queryutils.php");
-    
-            $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
-                or trigger_error("There was an error attempting to connect to the database.", E_USER_ERROR);
-    
-            $query = "UPDATE exercise_user SET first_name = ?, last_name = ?, gender = ?, birthdate = ?, `weight` = ? WHERE id = ?";
-    
-            $result = parameterizedQuery($dbc, $query, 'ssssi', $first_name, $last_name, $gender, $birthdate, $weight, $_SESSION('user_id'))
-                    or trigger_error(mysqli_error($dbc), E_USER_ERROR);
         }
     ?>
 

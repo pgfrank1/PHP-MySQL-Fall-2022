@@ -102,10 +102,10 @@
             <label class="form-label" for="exercise_type">Exercise Type</label>
             <select class="form-select" name="exercise_type" id="exercise_type" value="<?= $exercise_type ?>"  required>
                 <option selected value="">Choose an exercise</option>
-                <option value="running">Running</option>
-                <option value="walking">Walking</option>
-                <option value="weightlifting">Weightlifting</option>
-                <option value="other">Other</option>
+                <option value="Running">Running</option>
+                <option value="Walking">Walking</option>
+                <option value="Weightlifting">Weightlifting</option>
+                <option value="Other">Other</option>
             </select>
         </div>
         <div class="form-group p-3 row">

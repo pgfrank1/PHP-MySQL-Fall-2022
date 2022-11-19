@@ -33,7 +33,7 @@
 
     $query_exercises = "SELECT exercise_log.id, first_name, last_name, gender, birthdate, `weight`, `date`, exercise_type,"
             . " time_in_minutes, heartrate, calories FROM exercise_user JOIN exercise_log"
-            . " WHERE exercise_user.id = exercise_log.user_id && exercise_user.id = ? ";
+            . " WHERE exercise_user.id = exercise_log.user_id && exercise_user.id = ? ORDER BY exercise_log.id DESC";
 
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
         or trigger_error("There was an error attempting to connect to the database.", E_USER_ERROR);
@@ -57,7 +57,7 @@
         $age = calculateAge($birthdate);
 ?>
     <div class="row">
-        <div class="card col-3 px-0">
+        <div class="card col-3 px-0 h-50">
             <h3 class="card-header"><?= $first_name ?> <?= $last_name ?></h3>
             <div class="card-body px-3">
                 <p>Age: <?= $age ?></p>
@@ -100,6 +100,11 @@
                             while ($row = mysqli_fetch_assoc($result_exercises))
                             {
                                 $rowCounter++;
+                                
+                                if ($rowCounter >= 15)
+                                {
+                                    break;
+                                }
 
                                 $date = $row['date'];
                                 $exercise_type = $row['exercise_type'];
