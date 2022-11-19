@@ -1,5 +1,6 @@
 <?php
     //require_once('authorize.php');
+    session_start();
     require_once('pagetitles.php');
     $page_title = CREATE_USER;
 ?>

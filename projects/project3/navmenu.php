@@ -1,6 +1,3 @@
-<?php
-session_start();
-?>
 <nav class="navbar navbar-expand-lg bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand text-light" href="./">Project 3</a>
