@@ -6,4 +6,3 @@
         $age = $age->format('%y');
         return $age;
     }
-?>

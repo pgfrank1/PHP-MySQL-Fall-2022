@@ -67,13 +67,13 @@
 
             switch($gender) {
                 case "m": // ((-55.0969 + (0.6309 * HR) + (0.090174 * W) + (0.2017 * A)) / 4.184) * T
-                    $calories = round(((-55.0969 +(0.6309 * $heartrate) + (0.090174 * $weight) + (0.2017 * $age)) / 4.184) * $time_in_minutes);
+                    $calories = round(((-55.0969 + (0.6309 * $heartrate) + (0.090174 * $weight) + (0.2017 * $age)) / 4.184) * $time_in_minutes);
                     break;
                 case "f": // ((-20.4022 + (0.4472 * HR) – (0.057288 * W) + (0.074 * A)) / 4.184) * T
-                    $calories = round(((-20.4022 +(0.4472 * $heartrate) + (0.057288 * $weight) + (0.074 * $age)) / 4.184) * $time_in_minutes);
+                    $calories = round(((-20.4022 + (0.4472 * $heartrate) - (0.057288 * $weight) + (0.0740 * $age)) / 4.184) * $time_in_minutes);
                     break;
                 case "nb": // ((-37.7495 + (0.5391 * HR) + (0.01644 * W) + (0.1379 * A)) / 4.184) * T
-                    $calories = round(((-37.7495 +(0.5391 * $heartrate) + (0.01644 * $weight) + (0.1379 * $age)) / 4.184) * $time_in_minutes);
+                    $calories = round(((-37.7495 + (0.5391 * $heartrate) + (0.016440 * $weight) + (0.1379 * $age)) / 4.184) * $time_in_minutes);
                     break;
             }
             $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
@@ -140,7 +140,7 @@
             var forms = document.getElementsByClassName('needs-validation');
             var validation = Array.prototype.filter.call(forms, function(form) {
                 form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() == false) {
+                    if (form.checkValidity() === false) {
                         event.preventDefault();
                         event.stopPropagation();
                     }
