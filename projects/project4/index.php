@@ -10,13 +10,12 @@
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <title>Document</title>
 </head>
-
-<body style="height: 100% !important;">
-    <div class="container-fluid">
-        <div class="d-flex flex-row justify-content-evenly">
-                <div class="col-3 bg-primary p-4">
+<body style="min-height: 100vh !important;">
+    <div class="container-fluid row m-0 p-0">
+        <div class="d-flex flex-row justify-content-evenly p-0" style="min-height: 70vh!important;">
+                <div class="col-4 bg-primary p-4" style="min-width: 15em !important;">
                     <h1>Character Name</h1>
-                    <table class="table table-border text-center m-auto w-50">
+                    <table class="table table-border text-center m-auto w-75">
                         <tr>
                             <th>Health</th>
                         </tr>
@@ -70,14 +69,14 @@
                         </tr>
                     </table>
                 </div>
-                <div class="col-9 bg-success float-end">
+                <div class="col-8 bg-success p-4">
                     dialog
                 </div>
         </div>
-        <div class="d-flex flex-row justify-content-evenly bg-warning" style="max-height: 25% !important;">
-                <div class="col-3 p-4">
+        <div class="d-flex flex-row justify-content-evenly bg-warning p-0" style="min-height: 30vh!important;">
+                <div class="col-4 p-2">
                     <h2 class="text-center">Inventory</h2>
-                    <table class="table table-bordered border-light text-center m-auto bg-primary h-100">
+                    <table class="table table-bordered border-light text-center m-auto bg-primary">
                         <tr class="m-auto">
                             <td class="bg-light">1</td>
                             <td>2</td>
@@ -122,15 +121,17 @@
                         </tr>
                     </table>
                 </div>
-                <div class="col-3 p-4">
+                <div class="col-4 p-2">
                     <h2 class="text-center">Equipment</h2>
-                    <table class="table table-bordered border-light text-center m-auto bg-primary h-100">
-
+                    <table class="table table-bordered border-light text-center m-auto bg-primary">
+                        <tr>
+                            <td>Eqipment</td>
+                        </tr>
                     </table>
                 </div>
-                <div class="col-3 p-4">
+                <div class="col-4 p-2">
                     <h2 class="text-center">Actions</h2>
-                    <table class="table table-bordered border-light text-center m-auto bg-primary h-100">
+                    <table class="table table-bordered border-light text-center m-auto bg-primary">
                         <tr>
                             <td>1</td>
                             <td>2</td>
