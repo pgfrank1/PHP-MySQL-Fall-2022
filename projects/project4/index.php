@@ -1,7 +1,7 @@
 <?php
-    session_start();
-    require_once('page-titles.php');
-    $page_title = INDEX_PAGE;
+session_start();
+require_once('page-titles.php');
+$page_title = INDEX_PAGE;
 ?>
 
 <!DOCTYPE html>
