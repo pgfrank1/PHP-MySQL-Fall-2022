@@ -56,39 +56,13 @@ require_once("query-utils.php");
                     <?php
                     if (isset($_POST['create_admin']))
                     {
+                        require_once('admin-page-functions.php');
+
                         $username = $_POST['admin_username'];
+                        $password = $_POST['admin_password'];
+                        $verify_password = $_POST['verify_admin_password'];
 
-                        $query = "SELECT UserName FROM Project4.Administrators WHERE UserName = ?";
-
-                        $result = parameterizedQuery(DBC, $query, 's', $username)
-                        or trigger_error(mysqli_error(DBC), E_USER_ERROR);
-
-                        if (mysqli_num_rows($result) == 0)
-                        {
-                            if ($_POST['admin_password'] == $_POST['verify_admin_password'])
-                            {
-                                $hashed_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
-
-                                $query = "INSERT INTO Project4.Administrators (`UserName`, `HashPassword`) VALUES (?, ?)";
-
-                                $result = parameterizedQuery(DBC, $query, 'ss', $username, $hashed_password)
-                                or trigger_error(mysqli_error(DBC), E_USER_ERROR);
-                            }
-                            else
-                            {
-                                ?>
-                                <br>
-                                <p class="text-danger">Passwords do not match, please try again.</p>
-                                <?php
-                            }
-                        }
-                        else
-                        {
-                            ?>
-                            <br>
-                            <p class="text-danger">Username already exists, please try another username.</p>
-                            <?php
-                        }
+                        echo createAdminUser($username, $password, $verify_password);
                     }
                     ?>
                 </form>
