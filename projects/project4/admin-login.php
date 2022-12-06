@@ -18,6 +18,10 @@ $page_title = ADMIN_LOGIN;
 <main>
     <div class="container">
     <?php
+    if (!empty($_SESSION['admin_user_name']))
+    {
+        header('Location: admin-page.php');
+    }
     if (!isset($_POST['admin_login']))
     {
         ?>
@@ -64,8 +68,8 @@ $page_title = ADMIN_LOGIN;
 
             if (password_verify($password, $row['HashPassword']))
             {
-                $_SESSION['user_id'] = $row['id'];
-                $_SESSION['user_name'] = $row['username'];
+                $_SESSION['admin_user_id'] = $row['AdminId'];
+                $_SESSION['admin_user_name'] = $row['UserName'];
 
                 header("Location: admin-page.php");
             }
