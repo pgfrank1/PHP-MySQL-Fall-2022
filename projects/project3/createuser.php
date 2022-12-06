@@ -39,7 +39,7 @@
         action="<?= $_SERVER['PHP_SELF']?>">
         <div class="form-group row">
             <label class="form-label" for="username">Username</label>
-            <input type="text" name="username" id="username" value="<?= $username ?>" required>
+            <input class="" type="text" name="username" id="username" value="<?= $username ?>" required>
             <div class="invalid-feedback">
                 Please provide a username.
             </div>
