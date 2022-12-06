@@ -71,8 +71,7 @@ $page_title = ADMIN_LOGIN;
             }
             else
             {
-                echo "<h4><p class='text-danger'>An incorrect user name 
-                              or password was entered.</p></h4><hr/>";
+                echo "<h4><p class='text-danger'>An incorrect username or password was entered.</p></h4><hr/>";
             }
         }
         ?>
