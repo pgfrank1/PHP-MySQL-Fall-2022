@@ -1,7 +1,8 @@
 <?php
-    session_start();
-    require_once('page-titles.php');
-    $page_title = ADMIN_PAGE;
+session_start();
+require_once('page-titles.php');
+require_once('admin-page-functions.php');
+$page_title = ADMIN_PAGE;
 ?>
 
 <!DOCTYPE html>
@@ -25,9 +26,8 @@ require_once("query-utils.php");
     <div class="container-fluid">
         <h1 class="text-center">Admin Control</h1>
         <div class="d-flex justify-content-center">
-            <div class="d-flex justify-content-center">
-                <form class="needs-validation bg-light w-75 p-4" novalidate method="post" action="<?= $_SERVER['PHP_SELF']?>">
-                    <h2 class="flex-nowrap">Create New Admin</h2>
+                <form class="needs-validation bg-light w-75 p-4 m-1" novalidate method="post" action="<?= $_SERVER['PHP_SELF']?>">
+                    <h2 class="text-center mb-4">Create New Admin</h2>
                     <div class="form-group text-center">
                         <label class="form-label" for="admin_username">Admin Username:</label>
                         <input class="form-control" type="text" name="admin_username" id="admin_username" placeholder="Username" required>
@@ -49,15 +49,13 @@ require_once("query-utils.php");
                             Please verify the password.
                         </div>
                     </div>
-                    <div class="pt-4 text-center">
+                    <div class="pt-4 text-center align-self-end">
                         <button class="btn btn-primary" type="submit" name="create_admin">Submit</button>
                         <button class="btn btn-danger" type="reset">Reset</button>
                     </div>
                     <?php
                     if (isset($_POST['create_admin']))
                     {
-                        require_once('admin-page-functions.php');
-
                         $username = $_POST['admin_username'];
                         $password = $_POST['admin_password'];
                         $verify_password = $_POST['verify_admin_password'];
@@ -66,15 +64,60 @@ require_once("query-utils.php");
                     }
                     ?>
                 </form>
-            </div>
-            <div class="d-flex">
-                <form class="needs-validation bg-light w-75 p-4" novalidate method="POST" action="<?= $_SERVER['PHP_SELF']?>">
-                    <h2>Create New Item</h2>
+                <form class="needs-validation bg-light w-75 p-4 m-1" novalidate method="POST" action="<?= $_SERVER['PHP_SELF']?>">
+                    <h2 class="text-center mb-4">Create New Item</h2>
                     <div class="form-group text-center">
-
+                        <label class="form-label" for="item_name">Item Name:</label>
+                        <input class="form-control" type="text" name="item_name" id="item_name" placeholder="Item Name" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Name.
+                        </div>
                     </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="item_description">Item Description:</label>
+                        <input class="form-control" type="text" name="item_description" id="item_description" placeholder="Item Description" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Description.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="item_value">Item Value:</label>
+                        <input class="form-control" type="number" name="item_value" id="item_value" placeholder="Item Value" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Value.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="item_defence">Item Defence:</label>
+                        <input class="form-control" type="number" name="item_defence" id="item_defence" placeholder="Item Defence" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Defence.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="item_attack_strength">Item Attack Strength:</label>
+                        <input class="form-control" type="number" name="item_attack_strength" id="item_attack_strength" placeholder="Item Attack Strength" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Attack Strength.
+                        </div>
+                    </div>
+                    <div class="pt-4 text-center">
+                        <button class="btn btn-primary" type="submit" name="create_item">Submit</button>
+                        <button class="btn btn-danger" type="reset">Reset</button>
+                    </div>
+                    <?php
+                    if (isset($_POST['create_item']))
+                    {
+                        $item_name = $_POST['item_name'];
+                        $item_description = $_POST['item_description'];
+                        $item_value = $_POST['item_value'];
+                        $item_defence = $_POST['item_defence'];
+                        $item_attack_strength = $_POST['item_attack_strength'];
+
+                        echo createNewItem($item_name, $item_description, $item_value, $item_defence, $item_attack_strength);
+                    }
+                    ?>
                 </form>
-            </div>
         </div>
     </div>
 </main>
