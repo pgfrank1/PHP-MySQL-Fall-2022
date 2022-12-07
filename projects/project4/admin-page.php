@@ -246,66 +246,108 @@ require_once("query-utils.php");
                     $luck_boost = $_POST['luck_boost'];
                     $duration = $_POST['duration'];
 
-                    echo createNewConsumable($consumable_name, $consumable_description, $consumable_value , $health_recovery, $stamina_recovery, $mana_recovery, $strength_boost,
-                         $perception_boost, $endurance_boost, $charisma_boost, $intelligence_boost, $agility_boost, $luck_boost, $duration);
+                    echo createNewConsumable($consumable_name, $consumable_description, $consumable_value , $health_recovery,
+                            $stamina_recovery, $mana_recovery, $strength_boost, $perception_boost, $endurance_boost, $charisma_boost,
+                            $intelligence_boost, $agility_boost, $luck_boost, $duration);
                 }
                 ?>
             </form>
             <form class="needs-validation bg-light p-4 col-6 col-md-4 my-1 border border-secondary h-100" novalidate method="POST" action="<?= $_SERVER['PHP_SELF']?>">
-                <h2 class="text-center mb-4 h-25">Create New Consumables</h2>
+                <h2 class="text-center mb-4 h-25">Create New Enemy</h2>
                 <div class="h-75">
                     <div class="form-group text-center">
-                        <label class="form-label" for="item_name">Item Name:</label>
-                        <input class="form-control" type="text" name="item_name" id="item_name" placeholder="Item Name" required>
+                        <label class="form-label" for="enemy_name">Enemy Name:</label>
+                        <input class="form-control" type="text" name="enemy_name" id="enemy_name" placeholder="Enemy Name" required>
                         <div class="invalid-feedback">
                             Please provide the Item Name.
                         </div>
                     </div>
                     <div class="form-group text-center">
-                        <label class="form-label" for="item_description">Item Description:</label>
-                        <input class="form-control" type="text" name="item_description" id="item_description" placeholder="Item Description" required>
+                        <label class="form-label" for="enemy_health">Enemy Health:</label>
+                        <input class="form-control" type="number" name="enemy_health" id="enemy_health" placeholder="Enemy Health" required>
                         <div class="invalid-feedback">
                             Please provide the Item Description.
                         </div>
                     </div>
                     <div class="form-group text-center">
-                        <label class="form-label" for="item_value">Item Value:</label>
-                        <input class="form-control" type="number" name="item_value" id="item_value" placeholder="Item Value" required>
+                        <label class="form-label" for="experience">Experience:</label>
+                        <input class="form-control" type="number" name="experience" id="experience" placeholder="Experience" required>
                         <div class="invalid-feedback">
                             Please provide the Item Value.
                         </div>
                     </div>
                     <div class="form-group text-center">
-                        <label class="form-label" for="item_defence">Item Defence:</label>
-                        <input class="form-control" type="number" name="item_defence" id="item_defence" placeholder="Item Defence" required>
+                        <label class="form-label" for="strength">Strength:</label>
+                        <input class="form-control" type="number" name="strength" id="strength" placeholder="Strength" required>
                         <div class="invalid-feedback">
                             Please provide the Item Defence.
                         </div>
                     </div>
                     <div class="form-group text-center">
-                        <label class="form-label" for="item_attack_strength">Item Attack Strength:</label>
-                        <input class="form-control" type="number" name="item_attack_strength" id="item_attack_strength" placeholder="Item Attack Strength" required>
+                        <label class="form-label" for="perception">Perception:</label>
+                        <input class="form-control" type="number" name="perception" id="perception" placeholder="Perception" required>
                         <div class="invalid-feedback">
                             Please provide the Item Attack Strength.
                         </div>
                     </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="endurance">Endurance:</label>
+                        <input class="form-control" type="number" name="endurance" id="endurance" placeholder="Endurance" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Attack Strength.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="charisma">Charisma:</label>
+                        <input class="form-control" type="number" name="charisma" id="charisma" placeholder="Charisma" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Attack Strength.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="intelligence">Intelligence:</label>
+                        <input class="form-control" type="number" name="intelligence" id="intelligence" placeholder="Intelligenceh" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Attack Strength.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="agility">Agility:</label>
+                        <input class="form-control" type="number" name="agility" id="agility" placeholder="Agility" required>
+                        <div class="invalid-feedback">
+                            Please provide the Agility.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="luck">Luck:</label>
+                        <input class="form-control" type="number" name="luck" id="luck" placeholder="Luck" required>
+                        <div class="invalid-feedback">
+                            Please provide the Luck.
+                        </div>
+                    </div>
                     <div class="pt-4 text-center">
-                        <button class="btn btn-primary" type="submit" name="create_item">Submit</button>
+                        <button class="btn btn-primary" type="submit" name="create_enemy">Submit</button>
                         <button class="btn btn-danger" type="reset">Reset</button>
                     </div>
-                </div>
-                <?php
-                if (isset($_POST['create_item']))
-                {
-                    $item_name = $_POST['item_name'];
-                    $item_description = $_POST['item_description'];
-                    $item_value = $_POST['item_value'];
-                    $item_defence = $_POST['item_defence'];
-                    $item_attack_strength = $_POST['item_attack_strength'];
+                    <?php
+                    if (isset($_POST['create_enemy']))
+                    {
+                        $enemy_name = $_POST['enemy_name'];
+                        $enemy_health = $_POST['enemy_health'];
+                        $experience = $_POST['experience'];
+                        $strength = $_POST['strength'];
+                        $perception = $_POST['perception'];
+                        $endurance = $_POST['endurance'];
+                        $charisma = $_POST['charisma'];
+                        $intelligence = $_POST['intelligence'];
+                        $agility = $_POST['agility'];
+                        $luck = $_POST['luck'];
 
-                    echo createNewItem($item_name, $item_description, $item_value, $item_defence, $item_attack_strength);
-                }
-                ?>
+                        echo createNewEnemy($enemy_name, $enemy_health, $experience, $strength, $perception, $endurance,
+                                $charisma, $intelligence, $agility, $luck);
+                    }
+                    ?>
+                </div>
             </form>
         </div>
     </div>

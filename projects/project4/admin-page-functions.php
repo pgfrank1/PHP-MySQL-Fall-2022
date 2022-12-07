@@ -62,8 +62,9 @@ function createNewItem($itemName, $itemDescription, $itemValue, $itemDefence, $i
     }
 }
 
-function createNewConsumable($consumable_name, $consumable_description, $consumable_value, $health_recovery, $stamina_recovery, $mana_recovery, $strength_boost,
-                             $perception_boost, $endurance_boost, $charisma_boost, $intelligence_boost, $agility_boost, $luck_boost, $duration)
+function createNewConsumable($consumable_name, $consumable_description, $consumable_value, $health_recovery, $stamina_recovery,
+                             $mana_recovery, $strength_boost, $perception_boost, $endurance_boost, $charisma_boost,
+                             $intelligence_boost, $agility_boost, $luck_boost, $duration)
 {
     $query = "SELECT Name FROM Project4.Consumables WHERE Name = ?";
 
@@ -85,5 +86,32 @@ function createNewConsumable($consumable_name, $consumable_description, $consuma
     else
     {
         return '<br><p class="text-danger">Consumable already exists, please try another name.</p>';
+    }
+}
+
+function createNewEnemy($enemy_name, $enemy_health, $enemy_experience, $enemy_strength, $enemy_perception, $enemy_endurance,
+                        $enemy_charisma, $enemy_intelligence, $enemy_agility, $enemy_luck)
+{
+    $query = "SELECT EnemyName FROM Project4.Enemies WHERE EnemyName = ?";
+
+    $result = parameterizedQuery(DBC, $query, 's', $enemy_name)
+    or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+    if (mysqli_num_rows($result) == 0)
+    {
+        $query = "INSERT INTO Project4.Enemies (`EnemyName`, `EnemyHealth`, `Experience`, `Strength`, `Perception`, `Endurance`, `Charisma`, `Intelligence`, `Agility`, `Luck`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $result = parameterizedQuery(DBC , $query, 'siiiiiiiii', $enemy_name, $enemy_health, $enemy_experience, $enemy_strength,
+                $enemy_perception, $enemy_endurance, $enemy_charisma, $enemy_intelligence, $enemy_agility, $enemy_luck)
+                or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        if ($result)
+        {
+            return '<br><p class="text-success">Enemy Added</p>';
+        }
+    }
+    else
+    {
+        return '<br><p class="text-danger">Enemy already exists, please try another name.</p>';
     }
 }
