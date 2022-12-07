@@ -19,8 +19,8 @@
 <body style="min-height: 100vh !important;">
     <div class="container-fluid row m-0 p-0">
         <div class="d-flex flex-row justify-content-evenly p-0" style="min-height: 70vh!important;">
-                <div class="col-4 bg-primary p-4" style="min-width: 15em !important;">
-                    <h1>Character Name</h1>
+                <div class="col-4 bg-secondary p-4" style="min-width: 15em !important;">
+                    <h1 class="text-center"><?= $_SESSION['player_name']?></h1>
                     <table class="table table-border text-center m-auto w-75">
                         <tr>
                             <th>Health</th>
@@ -32,7 +32,7 @@
                             <th>Mana</th>
                         </tr>
                         <tr>
-                            <td>100</td>
+                            <td class="bg-primary">100</td>
                         </tr>
                         <tr>
                             <th>Stamina</th>
