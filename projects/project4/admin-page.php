@@ -253,6 +253,86 @@ require_once("query-utils.php");
                 ?>
             </form>
             <form class="needs-validation bg-light p-4 col-6 col-md-4 my-1 border border-secondary h-100" novalidate method="POST" action="<?= $_SERVER['PHP_SELF']?>">
+                <h2 class="text-center mb-4 h-25">Create New Class</h2>
+                <div class="h-75">
+                    <div class="form-group text-center">
+                        <label class="form-label" for="class_name">Class Name:</label>
+                        <input class="form-control" type="text" name="class_name" id="class_name" placeholder="Class Name" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Name.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="strength">Strength:</label>
+                        <input class="form-control" type="number" name="strength" id="strength" placeholder="Strength" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Defence.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="perception">Perception:</label>
+                        <input class="form-control" type="number" name="perception" id="perception" placeholder="Perception" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Attack Strength.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="endurance">Endurance:</label>
+                        <input class="form-control" type="number" name="endurance" id="endurance" placeholder="Endurance" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Attack Strength.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="charisma">Charisma:</label>
+                        <input class="form-control" type="number" name="charisma" id="charisma" placeholder="Charisma" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Attack Strength.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="intelligence">Intelligence:</label>
+                        <input class="form-control" type="number" name="intelligence" id="intelligence" placeholder="Intelligence" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Attack Strength.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="agility">Agility:</label>
+                        <input class="form-control" type="number" name="agility" id="agility" placeholder="Agility" required>
+                        <div class="invalid-feedback">
+                            Please provide the Agility.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="luck">Luck:</label>
+                        <input class="form-control" type="number" name="luck" id="luck" placeholder="Luck" required>
+                        <div class="invalid-feedback">
+                            Please provide the Luck.
+                        </div>
+                    </div>
+                    <div class="pt-4 text-center">
+                        <button class="btn btn-primary" type="submit" name="create_class">Submit</button>
+                        <button class="btn btn-danger" type="reset">Reset</button>
+                    </div>
+                    <?php
+                    if (isset($_POST['create_class']))
+                    {
+                        $class_name = $_POST['class_name'];
+                        $strength = $_POST['strength'];
+                        $perception = $_POST['perception'];
+                        $endurance = $_POST['endurance'];
+                        $charisma = $_POST['charisma'];
+                        $intelligence = $_POST['intelligence'];
+                        $agility = $_POST['agility'];
+                        $luck = $_POST['luck'];
+
+                        echo createNewClass($class_name, $strength, $perception, $endurance, $charisma, $intelligence, $agility, $luck);
+                    }
+                    ?>
+                </div>
+            </form>
+            <form class="needs-validation bg-light p-4 col-6 col-md-4 my-1 border border-secondary h-100" novalidate method="POST" action="<?= $_SERVER['PHP_SELF']?>">
                 <h2 class="text-center mb-4 h-25">Create New Enemy</h2>
                 <div class="h-75">
                     <div class="form-group text-center">
@@ -306,7 +386,7 @@ require_once("query-utils.php");
                     </div>
                     <div class="form-group text-center">
                         <label class="form-label" for="intelligence">Intelligence:</label>
-                        <input class="form-control" type="number" name="intelligence" id="intelligence" placeholder="Intelligenceh" required>
+                        <input class="form-control" type="number" name="intelligence" id="intelligence" placeholder="Intelligence" required>
                         <div class="invalid-feedback">
                             Please provide the Item Attack Strength.
                         </div>
@@ -344,7 +424,55 @@ require_once("query-utils.php");
                         $luck = $_POST['luck'];
 
                         echo createNewEnemy($enemy_name, $enemy_health, $experience, $strength, $perception, $endurance,
-                                $charisma, $intelligence, $agility, $luck);
+                            $charisma, $intelligence, $agility, $luck);
+                    }
+                    ?>
+                </div>
+            </form>
+            <form class="needs-validation bg-light p-4 col-6 col-md-4 my-1 border border-secondary h-100" novalidate method="POST" action="<?= $_SERVER['PHP_SELF']?>">
+                <h2 class="text-center mb-4 h-25">Create New Attack</h2>
+                <div class="h-75">
+                    <div class="form-group text-center">
+                        <label class="form-label" for="attack_name">Attack Name:</label>
+                        <input class="form-control" type="text" name="attack_name" id="attack_name" placeholder="Attack Name" required>
+                        <div class="invalid-feedback">
+                            Please provide the Item Name.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="main_attribute">Main Attribute:</label>
+                        <select class="form-select text-center" id="main_attribute" name="main_attribute" required>
+                            <option value="" selected>-Choose an attribute-</option>
+                            <option value="Strength">Strength</option>
+                            <option value="Perception">Perception</option>
+                            <option value="Endurance">Endurance</option>
+                            <option value="Charisma">Charisma</option>
+                            <option value="Intelligence">Intelligence</option>
+                            <option value="Agility">Agility</option>
+                            <option value="Luck">Luck</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select an attribute.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="form-label" for="class_relation">Choose which Classes can use this attack</label>
+                        <?php
+                            echo getAllClassesForAttacks();
+                        ?>
+                    </div>
+                    <div class="pt-4 text-center">
+                        <button class="btn btn-primary" type="submit" name="create_attack">Submit</button>
+                        <button class="btn btn-danger" type="reset">Reset</button>
+                    </div>
+                    <?php
+                    if (isset($_POST['create_attack']))
+                    {
+                        $attack_name = $_POST['attack_name'];
+                        $main_attribute = $_POST['main_attribute'];
+                        $class_ids = $_POST['class_id'];
+
+                        echo createNewAttack($attack_name, $main_attribute, $class_ids);
                     }
                     ?>
                 </div>

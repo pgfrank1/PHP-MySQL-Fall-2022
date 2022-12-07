@@ -1,7 +1,7 @@
 <?php
 
-require_once('dbconnection.php');
-require_once('query-utils.php');
+require('dbconnection.php');
+require('query-utils.php');
 
 function createAdminUser($username, $password, $verify_password)
 {
@@ -113,5 +113,68 @@ function createNewEnemy($enemy_name, $enemy_health, $enemy_experience, $enemy_st
     else
     {
         return '<br><p class="text-danger">Enemy already exists, please try another name.</p>';
+    }
+}
+
+function createNewClass($class_name, $strength, $perception, $endurance, $charisma, $intelligence, $agility, $luck)
+{
+    $query = "SELECT Name FROM Project4.Classes WHERE Name = ?";
+
+    $result = parameterizedQuery(DBC, $query, 's', $class_name)
+    or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+    if (mysqli_num_rows($result) == 0)
+    {
+        $query = "INSERT INTO Project4.Classes (`Name`, `Strength`, `Perception`, `Endurance`, `Charisma`, `Intelligence`, `Agility`, `Luck`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $result = parameterizedQuery(DBC , $query, 'siiiiiii', $class_name, $strength, $perception, $endurance, $charisma,
+                $intelligence, $agility, $luck)
+            or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        if ($result)
+        {
+            return '<br><p class="text-success">Class Added</p>';
+        }
+    }
+    else
+    {
+        return '<br><p class="text-danger">Class already exists, please try another name.</p>';
+    }
+}
+
+function getAllClassesForAttacks()
+{
+    $query = "SELECT `ClassId`, `Name` FROM Project4.Classes";
+
+    $result = mysqli_query(DBC, $query)
+        or trigger_error("There was an issue while querying the database", E_USER_ERROR);
+
+    if (mysqli_num_rows($result))
+    {
+        $return_classes = '<div class="w-50 m-auto">';
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $return_classes = $return_classes . '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="class_id" name="class_id" value="'.$row['ClassId'].'"><label class="form-check-label" for="class_name">'.$row['Name'].'</label></div>';
+        }
+        $return_classes = $return_classes . '</div>';
+
+        return $return_classes;
+    }
+    else
+    {
+        return '<p>NO CLASSES FOUND</p>';
+    }
+}
+
+function createNewAttack($attack_name, $main_attribute, $class_ids)
+{
+    $query = "SELECT * FROM Project4.Attacks";
+
+    $result = mysqli_query(DBC, $query)
+        or trigger_error("There was an issue while querying the database", E_USER_ERROR);
+
+    if(mysqli_num_rows($result))
+    {
+
     }
 }
