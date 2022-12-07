@@ -154,11 +154,10 @@ function getAllClassesForAttacks()
         $return_classes = '<div class="w-50 m-auto">';
         while($row = mysqli_fetch_assoc($result))
         {
-            $return_classes = $return_classes . '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="class_id" name="class_id" value="'.$row['ClassId'].'"><label class="form-check-label" for="class_name">'.$row['Name'].'</label></div>';
+            $return_classes = $return_classes . '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="class_id" name="class_id[]" value="'.htmlspecialchars($row['ClassId']).'"><label class="form-check-label" for="class_name">'.htmlspecialchars($row['Name']).'</label></div>';
         }
-        $return_classes = $return_classes . '</div>';
 
-        return $return_classes;
+        return $return_classes . '</div>';
     }
     else
     {
@@ -168,13 +167,48 @@ function getAllClassesForAttacks()
 
 function createNewAttack($attack_name, $main_attribute, $class_ids)
 {
-    $query = "SELECT * FROM Project4.Attacks";
+    $query = "SELECT AttackName FROM Project4.Attacks WHERE AttackName = ?";
 
-    $result = mysqli_query(DBC, $query)
-        or trigger_error("There was an issue while querying the database", E_USER_ERROR);
+    $result_attack = parameterizedQuery(DBC , $query, 's', $attack_name)
+        or trigger_error(mysqli_error(DBC), E_USER_ERROR);
 
-    if(mysqli_num_rows($result))
+    if(mysqli_num_rows($result_attack) == 0)
     {
+        $query_attack = "INSERT INTO Project4.Attacks VALUES (null, ?, ?)";
 
+        $result_attack = parameterizedQuery(DBC , $query_attack, 'ss', $attack_name, $main_attribute)
+            or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        if ($result_attack)
+        {
+            $query = "SELECT AttackId FROM Project4.Attacks WHERE AttackName = ?";
+
+            $result_attack_id = parameterizedQuery(DBC , $query, 's', $attack_name)
+                or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+            if ($result_attack_id)
+            {
+
+                $attack_id = mysqli_fetch_assoc($result_attack_id)['AttackId'];
+                $added_attacks_to_classes = false;
+                foreach ($class_ids as $class_id)
+                {
+                    $query_attack_class = "INSERT INTO Project4.Class_Attacks VALUES (?, ?)";
+
+                    $result_attack_class = parameterizedQuery(DBC, $query_attack_class, 'ii', $class_id, $attack_id)
+                        or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+                    $added_attacks_to_classes = $result_attack_class;
+                }
+                if ($added_attacks_to_classes)
+                {
+                    return "<p class='text-success'>Attack added to classes</p>";
+                }
+            }
+        }
+    }
+    else
+    {
+        return '<br><p class="text-danger">Attack already exists, please try another name.</p>';
     }
 }
