@@ -19,7 +19,9 @@ CREATE TABLE `Administrators` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `Administrators` (`AdminId`, `UserName`, `HashPassword`) VALUES
-    (1,	'admin',	'$2y$10$Qmo52oPG/KgAMROJVc1wQ.HAu7G3d7DDu6mbAujIeJaM05.6pS8Y2');
+                                                                         (1,	'admin',	'$2y$10$Qmo52oPG/KgAMROJVc1wQ.HAu7G3d7DDu6mbAujIeJaM05.6pS8Y2'),
+                                                                         (3,	'TEST',	'$2y$10$P41Kce52nhEB2Q6j9sB6te2m16STiG5GxkojuyUdqmbGxvBcOou..'),
+                                                                         (4,	'teee',	'$2y$10$OwaJ.CFc0kLYHv99M9YO1.sRwSQOkEI5Z3hZ4RYupTv4N1sZKUj6q');
 
 DROP TABLE IF EXISTS `Attacks`;
 CREATE TABLE `Attacks` (
@@ -29,6 +31,17 @@ CREATE TABLE `Attacks` (
                            PRIMARY KEY (`AttackId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Attacks` (`AttackId`, `AttackName`, `MainAttribute`) VALUES
+                                                                      (1,	'testtt',	'Charisma'),
+                                                                      (2,	'eeeeeee',	'Intelligence'),
+                                                                      (3,	'asdasdas',	'Charisma'),
+                                                                      (9,	'43455',	'Endurance'),
+                                                                      (10,	'fsdf',	'Endurance'),
+                                                                      (11,	'pppp',	'Perception'),
+                                                                      (12,	'234234',	'Intelligence'),
+                                                                      (13,	'vvffv',	'Strength'),
+                                                                      (14,	'xcvcv',	'Intelligence'),
+                                                                      (15,	'fdfdfdfdf',	'Endurance');
 
 DROP TABLE IF EXISTS `Class_Attacks`;
 CREATE TABLE `Class_Attacks` (
@@ -40,6 +53,10 @@ CREATE TABLE `Class_Attacks` (
                                  CONSTRAINT `Class_Attacks_Classes` FOREIGN KEY (`ClassId`) REFERENCES `Classes` (`ClassId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Class_Attacks` (`ClassId`, `AttackId`) VALUES
+                                                        (1,	15),
+                                                        (2,	15),
+                                                        (5,	15);
 
 DROP TABLE IF EXISTS `Classes`;
 CREATE TABLE `Classes` (
@@ -55,11 +72,17 @@ CREATE TABLE `Classes` (
                            PRIMARY KEY (`ClassId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Classes` (`ClassId`, `Name`, `Strength`, `Perception`, `Endurance`, `Charisma`, `Intelligence`, `Agility`, `Luck`) VALUES
+                                                                                                                                    (1,	'test',	1,	1,	1,	1,	1,	1,	1),
+                                                                                                                                    (2,	'test2',	2,	2,	2,	2,	2,	2,	2),
+                                                                                                                                    (5,	'<p>testing html</p>',	3,	3,	3,	3,	3,	3,	3);
 
 DROP TABLE IF EXISTS `Consumables`;
 CREATE TABLE `Consumables` (
-                               `ConsumableId` int NOT NULL,
+                               `ConsumableId` int NOT NULL AUTO_INCREMENT,
+                               `Name` varchar(255) NOT NULL,
                                `Description` varchar(255) NOT NULL,
+                               `Value` int NOT NULL,
                                `HealthRecovery` int NOT NULL,
                                `StaminaRecovery` int NOT NULL,
                                `ManaRecovery` int NOT NULL,
@@ -74,6 +97,8 @@ CREATE TABLE `Consumables` (
                                PRIMARY KEY (`ConsumableId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Consumables` (`ConsumableId`, `Name`, `Description`, `Value`, `HealthRecovery`, `StaminaRecovery`, `ManaRecovery`, `StrengthBoost`, `PerceptionBoost`, `EnduranceBoost`, `CharismaBoost`, `IntelligenceBoost`, `AgilityBoost`, `LuckBoost`, `Duration`) VALUES
+    (1,	'test',	'test',	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1);
 
 DROP TABLE IF EXISTS `Enemies`;
 CREATE TABLE `Enemies` (
@@ -91,6 +116,8 @@ CREATE TABLE `Enemies` (
                            PRIMARY KEY (`EnemyId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Enemies` (`EnemyId`, `EnemyName`, `EnemyHealth`, `Experience`, `Strength`, `Perception`, `Endurance`, `Charisma`, `Intelligence`, `Agility`, `Luck`) VALUES
+    (1,	'test',	1,	1,	1,	1,	1,	1,	1,	1,	1);
 
 DROP TABLE IF EXISTS `Items`;
 CREATE TABLE `Items` (
@@ -103,6 +130,8 @@ CREATE TABLE `Items` (
                          PRIMARY KEY (`ItemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `Items` (`ItemId`, `Name`, `Description`, `Value`, `Defence`, `AttackStrength`) VALUES
+    (1,	'test',	'teest',	4,	4,	4);
 
 DROP TABLE IF EXISTS `Player_Class`;
 CREATE TABLE `Player_Class` (
@@ -166,5 +195,4 @@ CREATE TABLE `Quests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- 2022-12-06 15:59:24
-
+-- 2022-12-07 05:42:28
