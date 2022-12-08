@@ -38,6 +38,7 @@ function calculateNewPlayerInformation($newPlayerClass)
     $_SESSION['player_current_mana'] = $_SESSION['player_max_mana'];
     $_SESSION['player_current_stamina'] = $_SESSION['player_max_stamina'];
 
+    $_SESSION['player_class_name'] = $newPlayerClass['Name'];
     $_SESSION['player_strength'] = $newPlayerClass['Strength'];
     $_SESSION['player_perception'] = $newPlayerClass['Perception'];
     $_SESSION['player_endurance'] = $newPlayerClass['Endurance'];
@@ -45,6 +46,8 @@ function calculateNewPlayerInformation($newPlayerClass)
     $_SESSION['player_intelligence'] = $newPlayerClass['Intelligence'];
     $_SESSION['player_agility'] = $newPlayerClass['Agility'];
     $_SESSION['player_luck'] = $newPlayerClass['Luck'];
+
+    $_SESSION['player_gold'] = 100;
 
 }
 

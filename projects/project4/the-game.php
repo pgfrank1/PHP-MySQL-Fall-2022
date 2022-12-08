@@ -41,8 +41,8 @@
     <div class="container-fluid row m-0 p-0">
         <div class="d-flex flex-row justify-content-evenly p-0" style="min-height: 70vh!important;">
                 <div class="col-4 bg-secondary p-4" style="min-width: 15em !important;">
-                    <h1 class="text-center"><?= $_SESSION['player_name']?></h1>
-                    <h2 class="text-center"><?= $_SESSION[] ?></h2>
+                    <h1 class="text-center"><?= htmlspecialchars($_SESSION['player_name'])?></h1>
+                    <h2 class="text-center">Class: <?= htmlspecialchars($_SESSION['player_class_name']) ?></h2>
                     <table class="table table-border text-center m-auto w-75">
                         <tr>
                             <th>Health</th>
@@ -122,10 +122,10 @@
                     <h2 class="text-center">Inventory</h2>
                     <table class="table table-bordered border-light text-center m-auto bg-primary">
                         <tr class="m-auto">
-                            <td class="bg-light">1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
+                            <td class="bg-light"><?= $_SESSION['player_gold']?> gold</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>1</td>
