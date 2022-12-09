@@ -37,7 +37,7 @@ function createAdminUser($username, $password, $verify_password)
     }
 }
 
-function createNewItem($itemName, $itemDescription, $itemValue, $itemDefence, $itemAttackStrength)
+function createNewItem($itemName, $itemDescription, $item_equip_slot, $itemValue, $itemDefence, $itemAttackStrength)
 {
     $query = "SELECT Name FROM Project4.Items WHERE Name = ?";
 
@@ -46,9 +46,9 @@ function createNewItem($itemName, $itemDescription, $itemValue, $itemDefence, $i
 
     if (mysqli_num_rows($result) == 0)
     {
-        $query = "INSERT INTO Project4.Items (`Name`, `Description`, `Value`, `Defence`, `AttackStrength`) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO Project4.Items (`Name`, `Description`, `Equip_Slot`, `Value`, `Defence`, `AttackStrength`) VALUES (?, ?, ?, ?, ?, ?)";
 
-        $result = parameterizedQuery(DBC , $query, 'ssiii', $itemName, $itemDescription, $itemValue, $itemDefence, $itemAttackStrength)
+        $result = parameterizedQuery(DBC , $query, 'sssiii', $itemName, $itemDescription, $item_equip_slot, $itemValue, $itemDefence, $itemAttackStrength)
             or trigger_error(mysqli_error(DBC), E_USER_ERROR);
 
         if ($result)

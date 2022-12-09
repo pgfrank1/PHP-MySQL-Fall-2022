@@ -84,6 +84,21 @@ require_once("query-utils.php");
                         </div>
                     </div>
                     <div class="form-group text-center">
+                        <label class="form-label" for="item_equip_slot">Equip Slot:</label>
+                        <select class="form-select text-center" id="item_equip_slot" name="item_equip_slot" required>
+                            <option value="" selected>-Choose an equipment slot-</option>
+                            <option value="Head">Head</option>
+                            <option value="Chest">Chest</option>
+                            <option value="Left Arm">Left Arm</option>
+                            <option value="Right Arm">Right Arm</option>
+                            <option value="Legs">Legs</option>
+                            <option value="Boots">Boots</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please provide the Equip Slot.
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
                         <label class="form-label" for="item_value">Item Value:</label>
                         <input class="form-control" type="number" name="item_value" id="item_value" placeholder="Item Value" required>
                         <div class="invalid-feedback">
@@ -114,11 +129,12 @@ require_once("query-utils.php");
                 {
                     $item_name = $_POST['item_name'];
                     $item_description = $_POST['item_description'];
+                    $item_equip_slot = $_POST['item_equip_slot'];
                     $item_value = $_POST['item_value'];
                     $item_defence = $_POST['item_defence'];
                     $item_attack_strength = $_POST['item_attack_strength'];
 
-                    echo createNewItem($item_name, $item_description, $item_value, $item_defence, $item_attack_strength);
+                    echo createNewItem($item_name, $item_description, $item_equip_slot, $item_value, $item_defence, $item_attack_strength);
                 }
                 ?>
             </form>

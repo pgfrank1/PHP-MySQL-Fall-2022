@@ -34,7 +34,7 @@ function calculateNewPlayerInformation($newPlayerClass)
 
     $_SESSION['player_max_health'] = $newPlayerClass['Endurance'] * 10;
     $_SESSION['player_max_mana'] = $newPlayerClass['Intelligence'] * 10;
-    $_SESSION['player_max_stamina'] = $newPlayerClass['Strength'] * 10;
+    $_SESSION['player_max_stamina'] = $newPlayerClass['Agility'] * 10;
 
     $_SESSION['player_current_health'] = $_SESSION['player_max_health'];
     $_SESSION['player_current_mana'] = $_SESSION['player_max_mana'];
@@ -53,7 +53,14 @@ function calculateNewPlayerInformation($newPlayerClass)
     $_SESSION['output_dialogue'] = '';
 
     $_SESSION['player_inventory'] = array();
-    $_SESSION['player_inventory']['Gold'] = 100;
+    $_SESSION['player_inventory']['Gold'] = 999;
+
+    $_SESSION['player_equipment']['Head'] = '';
+    $_SESSION['player_equipment']['Chest'] = '';
+    $_SESSION['player_equipment']['Right Hand'] = '';
+    $_SESSION['player_equipment']['Left Hand'] = '';
+    $_SESSION['player_equipment']['Legs'] = '';
+    $_SESSION['player_equipment']['Boots'] = '';
 
 }
 
@@ -114,10 +121,11 @@ function theGameOutput()
             }
         }
     }
+    // TODO: This will be for weapons and armor
     elseif (isset($_POST['purchase_item']))
     {
-        //$_SESSION['user_quantity'] = $_POST['consumable_quantity'];
-        $total_cost = $_SESSION['item_value'];
+        $_SESSION['user_quantity'] = $_POST['item_quantity'];
+        $total_cost = $_SESSION['user_quantity'] * $_SESSION['item_value'];
 
         if ($_SESSION['player_inventory']['Gold'] < $total_cost)
         {
@@ -126,8 +134,15 @@ function theGameOutput()
         else
         {
             $_SESSION['player_inventory']['Gold'] -= $total_cost;
-            $_SESSION['output_dialogue'] .= '<p>You have paid '. $total_cost .' gold for ' . $_SESSION['user_quantity'] . ' ' . $_SESSION['item_name'] .'.</p>';
-
+            $_SESSION['output_dialogue'] .= '<p>You have paid '. $total_cost .' gold for a ' . $_SESSION['item_name'] .'.</p>';
+            if (key_exists($_SESSION['item_name'], $_SESSION['player_inventory']))
+            {
+                $_SESSION['player_inventory'][$_SESSION['item_name']] += $_SESSION['user_quantity'];
+            }
+            else
+            {
+                $_SESSION['player_inventory'][$_SESSION['item_name']] = $_SESSION['user_quantity'];
+            }
         }
     }
 
@@ -137,11 +152,23 @@ function theGameOutput()
         $query = "SELECT * FROM Project4.Consumables WHERE ConsumableId = ?";
 
         $result = parameterizedQuery(DBC, $query, 'i', $_GET['purchaseConsumableId'])
-        or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+            or trigger_error(mysqli_error(DBC), E_USER_ERROR);
 
         if (mysqli_num_rows($result) == 1)
         {
             purchaseConsumables($result);
+        }
+    }
+    elseif (isset($_GET['purchaseItemId']))
+    {
+        $query = "SELECT * FROM Project4.Items WHERE ItemId = ?";
+
+        $result = parameterizedQuery(DBC, $query, 'i', $_GET['purchaseItemId'])
+            or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        if (mysqli_num_rows($result) == 1)
+        {
+            purchaseItems($result);
         }
     }
     else
@@ -175,6 +202,39 @@ function theGameOutput()
             echo $_SESSION['output_dialogue'];
         }
     }
+}
+
+function displayEquipment()
+{
+    ?>
+    <tr>
+        <td></td>
+        <td class="text-light">Head</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td class="text-light">Left Arm</td>
+        <td class="text-light">Chest</td>
+        <td class="text-light">Right Arm</td>
+    </tr>
+    <tr>
+        <td class="text-light"></td>
+        <td class="text-light">Legs</td>
+        <td class="text-light"></td>
+    </tr>
+    <tr>
+        <td class="text-light"></td>
+        <td class="text-light">Boots</td>
+        <td class="text-light"></td>
+    </tr>
+    <?php
+    $_SESSION['player_equipment']['Head'];
+    $_SESSION['player_equipment']['Chest'];
+    $_SESSION['player_equipment']['Right Hand'];
+    $_SESSION['player_equipment']['Left Hand'];
+    $_SESSION['player_equipment']['Legs'];
+    $_SESSION['player_equipment']['Boots'];
+
 }
 
 function displayActions()
@@ -212,6 +272,11 @@ function displayActions()
     }
     elseif ($_SESSION['player_in_smithy'])
     {
+        $query = "SELECT * FROM Project4.Items";
+
+        $result = mysqli_query(DBC, $query)
+            or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
         echo '<tr>
                 <td class="text-light">
                     <a class="text-light decoration-none" href="the-game.php?goToTown#bottom_of_dialogue">Go to Town</a>
@@ -223,6 +288,25 @@ function displayActions()
                     <a class="text-light decoration-none" href="the-game.php?goToApothecary#bottom_of_dialogue">Go to Apothecary</a>
                 </td>
               </tr>';
+
+        if ($result)
+        {
+            echo '<tr>';
+            $max_of_three_columns = 0;
+            while ($row = mysqli_fetch_assoc($result))
+            {
+                if ($max_of_three_columns == 3)
+                {
+                    $max_of_three_columns = 0;
+                    echo '</tr><tr>';
+                }
+                echo '<td class="text-light">
+                            <a class="text-light" href="the-game.php?purchaseItemId=' . $row['ItemId'] . '#bottom_of_dialogue">' . $row['Name'] . '</a>
+                        </td>';
+                $max_of_three_columns++;
+            }
+            echo '</tr>';
+        }
     }
     elseif ($_SESSION['player_in_apothecary'])
     {
@@ -247,11 +331,18 @@ function displayActions()
         if ($result)
         {
             echo '<tr>';
+            $max_of_three_columns = 0;
             while ($row = mysqli_fetch_assoc($result))
             {
-                echo '<td class="text-light">
+                if ($max_of_three_columns == 3)
+                {
+                    $max_of_three_columns = 0;
+                    echo '</tr><tr>';
+                }
+                    echo '<td class="text-light">
                             <a class="text-light" href="the-game.php?purchaseConsumableId=' . $row['ConsumableId'] . '#bottom_of_dialogue">' . $row['Name'] . '</a>
                         </td>';
+                $max_of_three_columns++;
             }
             echo '</tr>';
         }

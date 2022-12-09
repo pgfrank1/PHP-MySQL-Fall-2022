@@ -135,11 +135,19 @@
                     <table class="table table-bordered border-light text-center m-auto bg-primary">
                         <tr>
                         <?php
+                        $max_of_three_columns = 0;
                         foreach($_SESSION['player_inventory'] as $key=>$value)
                         {
+                            if ($max_of_three_columns == 3){
+                            ?>
+                        </tr>
+                        <tr>
+                            <?php
+                            }
                         ?>
-                            <td class="bg-light"><?= $value ?> <?= $key ?></td>
+                            <td class="text-light bg-primary"><?= $value ?> <?= $key ?></td>
                         <?php
+                        $max_of_three_columns++;
                         }
                         ?>
                         </tr>
@@ -148,16 +156,16 @@
                 <div class="col-4 p-2">
                     <h2 class="text-center">Equipment</h2>
                     <table class="table table-bordered border-light text-center m-auto bg-primary">
-                        <tr>
-                            <td>Equipment</td>
-                        </tr>
+                     <?php
+                     echo displayEquipment();
+                     ?>
                     </table>
                 </div>
                 <div class="col-4 p-2">
                     <h2 class="text-center">Actions</h2>
                     <table class="table table-bordered border-light text-center m-auto bg-primary">
                         <?php
-                        displayActions();
+                        echo displayActions();
                         ?>
                     </table>
                 </div>
