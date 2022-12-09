@@ -3,6 +3,8 @@
     require_once('page-titles.php');
     require_once('dbconnection.php');
     require_once('the-game-functions.php');
+    $page_title = HOME_PAGE;
+
     if (empty($_SESSION['player_name']))
     {
         header('Location: index.php');
@@ -22,7 +24,7 @@
         $_SESSION['player_current_stamina'] = $_SESSION['player_max_stamina'];
     }
 
-    $page_title = HOME_PAGE;
+    getPlayerLocation();
 ?>
 
 <!DOCTYPE html>
@@ -103,18 +105,29 @@
                     {
                     ?>
                     <a href="admin-page.php" class="d-block btn btn-danger">Go to Admin Page</a>
+                    <br>
                     <?php
                     }
                     else
                     {
                     ?>
                     <a href="admin-login.php" class="d-block btn btn-danger">Login to Admin Page</a>
+                    <br>
                     <?php
                     }
+                    if (isset($_GET['resetGame']))
+                    {
+                        session_destroy();
+                        header('Location: index.php');
+                    }
                     ?>
+                    <a href="the-game.php?resetGame" class="d-block btn btn-danger">Restart and Make New Character</a>
                 </div>
-                <div class="col-8 bg-success p-4">
-                    dialog
+                <div class="col-8 p-4 position-relative" style="overflow: scroll; max-height: 70vh;">
+                    <?php
+                        echo theGameOutput();
+                    ?>
+                    <div id="bottom_of_dialogue"></div>
                 </div>
         </div>
         <div class="d-flex flex-row justify-content-evenly bg-warning p-0" style="min-height: 30vh!important;">
@@ -176,21 +189,9 @@
                 <div class="col-4 p-2">
                     <h2 class="text-center">Actions</h2>
                     <table class="table table-bordered border-light text-center m-auto bg-primary">
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                        </tr>
+                        <?php
+                        displayActions();
+                        ?>
                     </table>
                 </div>
         </div>

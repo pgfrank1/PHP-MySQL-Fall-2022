@@ -2,6 +2,8 @@
 session_start();
 require_once('dbconnection.php');
 require_once('query-utils.php');
+require_once('purchase-functions.php');
+
 
 function getAllClassesForPlayer()
 {
@@ -47,8 +49,175 @@ function calculateNewPlayerInformation($newPlayerClass)
     $_SESSION['player_agility'] = $newPlayerClass['Agility'];
     $_SESSION['player_luck'] = $newPlayerClass['Luck'];
 
+    $_SESSION['new_player_start'] = true;
+    $_SESSION['output_dialogue'] = '';
+
     $_SESSION['player_gold'] = 100;
 
+}
+
+function getPlayerLocation()
+{
+    if (isset($_GET['goToTavern']))
+    {
+        $_SESSION['player_in_tavern'] = true;
+        $_SESSION['player_in_town'] = false;
+        $_SESSION['player_in_smithy'] = false;
+        $_SESSION['player_in_apothecary'] = false;
+    }
+    elseif (isset($_GET['goToSmithy']))
+    {
+        $_SESSION['player_in_tavern'] = false;
+        $_SESSION['player_in_town'] = false;
+        $_SESSION['player_in_smithy'] = true;
+        $_SESSION['player_in_apothecary'] = false;
+    }
+    if (isset($_GET['goToApothecary']))
+    {
+        $_SESSION['player_in_tavern'] = false;
+        $_SESSION['player_in_town'] = false;
+        $_SESSION['player_in_smithy'] = false;
+        $_SESSION['player_in_apothecary'] = true;
+    }
+    if (isset($_GET['goToTown']))
+    {
+        $_SESSION['player_in_tavern'] = false;
+        $_SESSION['player_in_town'] = true;
+        $_SESSION['player_in_smithy'] = false;
+        $_SESSION['player_in_apothecary'] = false;
+    }
+}
+
+function getConsumablePrice()
+{
+}
+
+function theGameOutput()
+{
+    if(isset($_GET['purchaseConsumableId']))
+    {
+        $query = "SELECT * FROM Project4.Consumables WHERE ConsumableId = ?";
+
+        $result = parameterizedQuery(DBC, $query, 'i', $_GET['purchaseConsumableId'])
+        or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        if (mysqli_num_rows($result) == 1)
+        {
+            purchaseConsumables($result);
+        }
+    }
+    else
+    {
+        if ($_SESSION['new_player_start'])
+        {
+            $_SESSION['new_player_start'] = false;
+            $_SESSION['player_in_town'] = true;
+            $_SESSION['output_dialogue'] .= '<p class="bg-light">You find yourself tired of the slow tedious life of a farmer and seek adventure! Your family gives you 100 gold to start your journey. They recommend that you go get some equipment</p>';
+            $_SESSION['output_dialogue'] .= '<p>You enter the town. You can go to the tavern for quests and rewards, the smithy to buy better gear, and the apothecary to stock up on potions.</p>';
+            echo $_SESSION['output_dialogue'];
+        }
+        elseif ($_SESSION['player_in_town'])
+        {
+            $_SESSION['output_dialogue'] .= '<p>You enter the town. You can go to the tavern for quests and rewards, the smithy to buy better gear, and the apothecary to stock up on potions.</p>';
+            echo $_SESSION['output_dialogue'];
+        }
+        elseif ($_SESSION['player_in_tavern'])
+        {
+            $_SESSION['output_dialogue'] .= '<p>You enter the tavern. You can go to the job board to look at available quests and their rewards</p>';
+            echo $_SESSION['output_dialogue'];
+        }
+        elseif ($_SESSION['player_in_smithy'])
+        {
+            $_SESSION['output_dialogue'] .= '<p>You enter the smithy. You can buy weapons and armor here</p>';
+            echo $_SESSION['output_dialogue'];
+        }
+        elseif ($_SESSION['player_in_apothecary'])
+        {
+            $_SESSION['output_dialogue'] .= '<p>You enter the apothecary. You can buy potions for your health, mana, stamina and even attribute boosts.</p>';
+            echo $_SESSION['output_dialogue'];
+        }
+    }
+}
+
+function displayActions()
+{
+    if ($_SESSION['player_in_town'])
+    {
+        echo '<tr>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToTavern#bottom_of_dialogue">Go to Tavern</a>
+                </td>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToSmithy#bottom_of_dialogue" >Go to Smithy</a>
+                </td>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToApothecary#bottom_of_dialogue" >Go to Apothecary</a>
+                </td>
+              </tr>
+              <tr>
+              </tr>';
+
+    }
+    elseif ($_SESSION['player_in_tavern'])
+    {
+        echo '<tr>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToTown#bottom_of_dialogue">Go to Town</a>
+                </td>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToSmithy#bottom_of_dialogue">Go to Smithy</a>
+                </td>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToApothecary#bottom_of_dialogue">Go to Apothecary</a>
+                </td>
+              </tr>';
+    }
+    elseif ($_SESSION['player_in_smithy'])
+    {
+        echo '<tr>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToTown#bottom_of_dialogue">Go to Town</a>
+                </td>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToTavern#bottom_of_dialogue"">Go to Tavern</a>
+                </td>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToApothecary#bottom_of_dialogue">Go to Apothecary</a>
+                </td>
+              </tr>';
+    }
+    elseif ($_SESSION['player_in_apothecary'])
+    {
+        $query = "SELECT * FROM Project4.Consumables";
+
+        $result = mysqli_query(DBC, $query)
+            or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        echo '<tr>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToTown#bottom_of_dialogue">Go to Town</a>
+                </td>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToSmithy#bottom_of_dialogue">Go to Smithy</a>
+                </td>
+                <td class="text-light">
+                    <a class="text-light decoration-none" href="the-game.php?goToTavern#bottom_of_dialogue">Go to Tavern</a>
+                </td>
+              </tr>
+              <tr><td class="text-light" colspan="3">Potions</td></tr>';
+
+        if ($result)
+        {
+            echo '<tr>';
+            while ($row = mysqli_fetch_assoc($result))
+            {
+                echo '<td class="text-light">
+                            <a class="text-light" href="the-game.php?purchaseConsumableId=' . $row['ConsumableId'] . '#bottom_of_dialogue">' . $row['Name'] . '</a>
+                        </td>';
+            }
+            echo '</tr>';
+        }
+    }
 }
 
 function getPlayerStrength()
