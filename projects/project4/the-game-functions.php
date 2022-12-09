@@ -98,6 +98,50 @@ function getPlayerLocation()
     }
 }
 
+function setInventoryAndEquipment()
+{
+    if (isset($_GET['equipItemId']))
+    {
+        $query = "SELECT * FROM Project4.Items WHERE ItemId = ?";
+
+        $result = parameterizedQuery(DBC, $query, 's', $_GET['equipItemId'])
+        or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        if (mysqli_num_rows($result) == 1)
+        {
+            $row = mysqli_fetch_assoc($result);
+            // TODO: Finish switch statement for equipment and be able to remove them from the inventory array
+            switch ($row['Equip_Slot']):
+                case 'Head':
+                    if($_SESSION['player_equipment']['Head'] == $row['Name'])
+                    {
+                        $_SESSION['output_dialogue'] .= 'You equip the 1' . $row['Name'];
+                    }
+                    else
+                    {
+                        if ($_SESSION['player_inventory'][$row['Name']] == 1)
+                        {
+                            $placeholder = $_SESSION['player_equipment']['Head'];
+                            $_SESSION['player_equipment']['Head'] = $row['Name'];
+                            unset($_SESSION['player_inventory'][$row['Name']]);
+                            unset($_SESSION['player_inventory'][$placeholder]);
+                            //$_SESSION['player_inventory'][$placeholder] = 1;
+                            $_SESSION['output_dialogue'] .= 'You equip the 2' . $row['Name'];
+
+                        }
+                        elseif ($_SESSION['player_inventory'][$row['Name']] > 1)
+                        {
+                            $_SESSION['player_inventory'][$row['Name']] -= 1;
+                            $_SESSION['player_inventory'][$_SESSION['player_equipment']['Head']] = 1;
+                            $_SESSION['player_equipment']['Head'] = $row['Name'];
+                            $_SESSION['output_dialogue'] .= 'You equip the 3' . $row['Name'];
+                        }
+                    }
+            endswitch;
+        }
+    }
+}
+
 function theGameOutput()
 {
     if (isset($_POST['purchase_consumable']))
@@ -225,7 +269,7 @@ function displayInventory()
         {
             $row = mysqli_fetch_assoc($result);
 
-            echo '<td class="text-light bg-primary"><a class="text-light" href="the-game.php?equipItemId=' . $row['ItemId'] . '#bottom_of_dialogue">t' . $value . ' ' . $key . '</a></td>';
+            echo '<td class="text-light bg-primary"><a class="text-light" href="the-game.php?equipItemId=' . $row['ItemId'] . '#bottom_of_dialogue">' . $value . ' ' . $key . '</a></td>';
 
         }
         else
@@ -238,44 +282,7 @@ function displayInventory()
 }
 
 function displayEquipment()
-{
-    if (isset($_GET['equipItemId']))
-    {
-        $query = "SELECT * FROM Project4.Items WHERE ItemId = ?";
-
-        $result = parameterizedQuery(DBC, $query, 's', $_GET['equipItemId'])
-            or trigger_error(mysqli_error(DBC), E_USER_ERROR);
-
-        if (mysqli_num_rows($result) == 1)
-        {
-            $row = mysqli_fetch_assoc($result);
-            // TODO: Finish switch statement for equipment and be able to remove them from the inventory array
-            switch ($row['Equip_Slot']):
-                case 'Head':
-                    if($_SESSION['player_equipment']['Head'] == $row['Name'])
-                    {
-                        $_SESSION['output_dialogue'] .= 'You equip the ' . $row['Name'];
-                        $_SESSION['player_equipment']['Head'] = $row['Name'];
-
-                    }
-                    else
-                    {
-                        if ($_SESSION['player_inventory'][$row['Name']] > 1)
-                        {
-                            $_SESSION['output_dialogue'] .= 'You equip the ' . $row['Name'];
-                            $_SESSION['player_equipment']['Head'] = $row['Name'];
-                            $_SESSION['player_inventory'][$row['Name']] -= 1;
-                        }
-                        else
-                        {
-                            unset($_SESSION['player_inventory'][ $row['Name']]);
-                        }
-                    }
-            endswitch;
-        }
-
-    }
-    ?>
+{?>
     <tr>
         <td></td>
         <td class="text-light">Head<br><?= $_SESSION['player_equipment']['Head']?></td>

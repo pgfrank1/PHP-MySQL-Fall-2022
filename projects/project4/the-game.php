@@ -24,6 +24,7 @@
         $_SESSION['player_current_stamina'] = $_SESSION['player_max_stamina'];
     }
     getPlayerLocation();
+    setInventoryAndEquipment();
 ?>
 
 <!DOCTYPE html>
