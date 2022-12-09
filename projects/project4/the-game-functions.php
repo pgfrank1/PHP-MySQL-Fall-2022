@@ -56,12 +56,13 @@ function calculateNewPlayerInformation($newPlayerClass)
     $_SESSION['player_inventory']['Gold'] = 999;
 
     $_SESSION['player_equipment'] = array();
-    $_SESSION['player_equipment']['Head'] = '';
-    $_SESSION['player_equipment']['Chest'] = '';
-    $_SESSION['player_equipment']['Right Hand'] = '';
-    $_SESSION['player_equipment']['Left Hand'] = '';
-    $_SESSION['player_equipment']['Legs'] = '';
-    $_SESSION['player_equipment']['Boots'] = '';
+    $_SESSION['player_equipment']['Head'];
+    $_SESSION['player_equipment']['Chest'];
+    $_SESSION['player_equipment']['Right Hand'];
+    $_SESSION['player_equipment']['Left Hand'];
+    $_SESSION['player_equipment']['Legs'];
+    $_SESSION['player_equipment']['Boots'];
+    $_SESSION['player_defence'] = 0;
 
 }
 
@@ -251,8 +252,25 @@ function displayEquipment()
             // TODO: Finish switch statement for equipment and be able to remove them from the inventory array
             switch ($row['Equip_Slot']):
                 case 'Head':
-                    $_SESSION['player_equipment']['Head'] = $row['Name'];
-                    //$_SESSION['player_inventory'][]
+                    if($_SESSION['player_equipment']['Head'] == $row['Name'])
+                    {
+                        $_SESSION['output_dialogue'] .= 'You equip the ' . $row['Name'];
+                        $_SESSION['player_equipment']['Head'] = $row['Name'];
+
+                    }
+                    else
+                    {
+                        if ($_SESSION['player_inventory'][$row['Name']] > 1)
+                        {
+                            $_SESSION['output_dialogue'] .= 'You equip the ' . $row['Name'];
+                            $_SESSION['player_equipment']['Head'] = $row['Name'];
+                            $_SESSION['player_inventory'][$row['Name']] -= 1;
+                        }
+                        else
+                        {
+                            unset($_SESSION['player_inventory'][ $row['Name']]);
+                        }
+                    }
             endswitch;
         }
 

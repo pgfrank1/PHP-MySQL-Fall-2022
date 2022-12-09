@@ -128,7 +128,8 @@ CREATE TABLE `Items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `Items` (`ItemId`, `Name`, `Description`, `Equip_Slot`, `Value`, `Defence`, `AttackStrength`) VALUES
-    (3,	'Leather Helmet',	'A simple helment made of leather',	'Head',	15,	5,	0);
+                                                                                                              (3,	'Leather Helmet',	'A simple helment made of leather',	'Head',	15,	5,	0),
+                                                                                                              (4,	'Steel Helmet',	'Helmet made of steel',	'Head',	50,	10,	0);
 
 DROP TABLE IF EXISTS `Player_Class`;
 CREATE TABLE `Player_Class` (
@@ -192,4 +193,4 @@ CREATE TABLE `Quests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- 2022-12-09 13:59:57
+-- 2022-12-09 14:28:25
