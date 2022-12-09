@@ -7,9 +7,6 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
-CREATE DATABASE `Project4` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `Project4`;
-
 DROP TABLE IF EXISTS `Administrators`;
 CREATE TABLE `Administrators` (
                                   `AdminId` int NOT NULL AUTO_INCREMENT,
@@ -53,10 +50,6 @@ CREATE TABLE `Class_Attacks` (
                                  CONSTRAINT `Class_Attacks_Classes` FOREIGN KEY (`ClassId`) REFERENCES `Classes` (`ClassId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `Class_Attacks` (`ClassId`, `AttackId`) VALUES
-                                                        (1,	15),
-                                                        (2,	15),
-                                                        (5,	15);
 
 DROP TABLE IF EXISTS `Classes`;
 CREATE TABLE `Classes` (
@@ -73,9 +66,10 @@ CREATE TABLE `Classes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `Classes` (`ClassId`, `Name`, `Strength`, `Perception`, `Endurance`, `Charisma`, `Intelligence`, `Agility`, `Luck`) VALUES
-                                                                                                                                    (1,	'test',	1,	1,	1,	1,	1,	1,	1),
-                                                                                                                                    (2,	'test2',	2,	2,	2,	2,	2,	2,	2),
-                                                                                                                                    (5,	'<p>testing html</p>',	3,	3,	3,	3,	3,	3,	3);
+                                                                                                                                    (6,	'Knight',	12,	10,	12,	8,	8,	8,	10),
+                                                                                                                                    (7,	'Assassin',	8,	12,	8,	10,	10,	12,	10),
+                                                                                                                                    (8,	'Mage',	8,	10,	8,	12,	12,	10,	10),
+                                                                                                                                    (9,	'Archer',	10,	12,	10,	8,	8,	12,	10);
 
 DROP TABLE IF EXISTS `Consumables`;
 CREATE TABLE `Consumables` (
@@ -98,7 +92,9 @@ CREATE TABLE `Consumables` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `Consumables` (`ConsumableId`, `Name`, `Description`, `Value`, `HealthRecovery`, `StaminaRecovery`, `ManaRecovery`, `StrengthBoost`, `PerceptionBoost`, `EnduranceBoost`, `CharismaBoost`, `IntelligenceBoost`, `AgilityBoost`, `LuckBoost`, `Duration`) VALUES
-    (1,	'test',	'test',	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1);
+                                                                                                                                                                                                                                                                         (2,	'Health Potion',	'Regain health by drinking this potion',	30,	50,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0),
+                                                                                                                                                                                                                                                                         (3,	'Stamina Potion',	'Restores your stamina',	20,	0,	50,	0,	0,	0,	0,	0,	0,	0,	0,	0),
+                                                                                                                                                                                                                                                                         (4,	'Mana Potion',	'Restores your mana',	30,	0,	0,	50,	0,	0,	0,	0,	0,	0,	0,	0);
 
 DROP TABLE IF EXISTS `Enemies`;
 CREATE TABLE `Enemies` (
@@ -124,14 +120,15 @@ CREATE TABLE `Items` (
                          `ItemId` int NOT NULL AUTO_INCREMENT,
                          `Name` varchar(255) NOT NULL,
                          `Description` varchar(255) NOT NULL,
+                         `Equip_Slot` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
                          `Value` int NOT NULL,
                          `Defence` int NOT NULL,
                          `AttackStrength` int NOT NULL,
                          PRIMARY KEY (`ItemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `Items` (`ItemId`, `Name`, `Description`, `Value`, `Defence`, `AttackStrength`) VALUES
-    (1,	'test',	'teest',	4,	4,	4);
+INSERT INTO `Items` (`ItemId`, `Name`, `Description`, `Equip_Slot`, `Value`, `Defence`, `AttackStrength`) VALUES
+    (3,	'Leather Helmet',	'A simple helment made of leather',	'Head',	15,	5,	0);
 
 DROP TABLE IF EXISTS `Player_Class`;
 CREATE TABLE `Player_Class` (
@@ -195,4 +192,4 @@ CREATE TABLE `Quests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- 2022-12-07 05:42:28
+-- 2022-12-09 13:59:57

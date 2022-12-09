@@ -252,7 +252,7 @@ function displayEquipment()
             switch ($row['Equip_Slot']):
                 case 'Head':
                     $_SESSION['player_equipment']['Head'] = $row['Name'];
-                    $_SESSION['player_inventory'][]
+                    //$_SESSION['player_inventory'][]
             endswitch;
         }
 
