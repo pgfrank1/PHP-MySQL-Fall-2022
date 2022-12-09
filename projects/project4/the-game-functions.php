@@ -55,6 +55,7 @@ function calculateNewPlayerInformation($newPlayerClass)
     $_SESSION['player_inventory'] = array();
     $_SESSION['player_inventory']['Gold'] = 999;
 
+    $_SESSION['player_equipment'] = array();
     $_SESSION['player_equipment']['Head'] = '';
     $_SESSION['player_equipment']['Chest'] = '';
     $_SESSION['player_equipment']['Right Hand'] = '';
@@ -121,7 +122,6 @@ function theGameOutput()
             }
         }
     }
-    // TODO: This will be for weapons and armor
     elseif (isset($_POST['purchase_item']))
     {
         $_SESSION['user_quantity'] = $_POST['item_quantity'];
@@ -204,41 +204,86 @@ function theGameOutput()
     }
 }
 
+function displayInventory()
+{
+    $query = "SELECT * FROM Project4.Items WHERE Name = ?";
+
+    echo '<tr>';
+    $max_of_three_columns = 0;
+    foreach($_SESSION['player_inventory'] as $key=>$value)
+    {
+        if ($max_of_three_columns == 3)
+        {
+            echo '</tr><tr>';
+        }
+
+        $result = parameterizedQuery(DBC, $query, 's', $key)
+            or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        if (mysqli_num_rows($result) == 1)
+        {
+            $row = mysqli_fetch_assoc($result);
+
+            echo '<td class="text-light bg-primary"><a class="text-light" href="the-game.php?equipItemId=' . $row['ItemId'] . '#bottom_of_dialogue">t' . $value . ' ' . $key . '</a></td>';
+
+        }
+        else
+        {
+            echo '<td class="text-light bg-primary">' . $value . ' ' . $key . '</td>';
+        }
+    $max_of_three_columns++;
+    }
+    echo '</tr>';
+}
+
 function displayEquipment()
 {
+    if (isset($_GET['equipItemId']))
+    {
+        $query = "SELECT * FROM Project4.Items WHERE ItemId = ?";
+
+        $result = parameterizedQuery(DBC, $query, 's', $_GET['equipItemId'])
+            or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        if (mysqli_num_rows($result) == 1)
+        {
+            $row = mysqli_fetch_assoc($result);
+            // TODO: Finish switch statement for equipment and be able to remove them from the inventory array
+            switch ($row['Equip_Slot']):
+                case 'Head':
+                    $_SESSION['player_equipment']['Head'] = $row['Name'];
+                    $_SESSION['player_inventory'][]
+            endswitch;
+        }
+
+    }
     ?>
     <tr>
         <td></td>
-        <td class="text-light">Head</td>
+        <td class="text-light">Head<br><?= $_SESSION['player_equipment']['Head']?></td>
         <td></td>
     </tr>
     <tr>
-        <td class="text-light">Left Arm</td>
-        <td class="text-light">Chest</td>
-        <td class="text-light">Right Arm</td>
+        <td class="text-light">Left Hand<br><?= $_SESSION['player_equipment']['Left Hand'] ?></td>
+        <td class="text-light">Chest<br><?= $_SESSION['player_equipment']['Chest'] ?></td>
+        <td class="text-light">Right Hand<br?<?= $_SESSION['player_equipment']['Right Hand'] ?></td>
     </tr>
     <tr>
         <td class="text-light"></td>
-        <td class="text-light">Legs</td>
+        <td class="text-light">Legs<br><?= $_SESSION['player_equipment']['Legs'] ?></td>
         <td class="text-light"></td>
     </tr>
     <tr>
         <td class="text-light"></td>
-        <td class="text-light">Boots</td>
+        <td class="text-light">Boots<?= $_SESSION['player_equipment']['Boots'] ?></td>
         <td class="text-light"></td>
     </tr>
     <?php
-    $_SESSION['player_equipment']['Head'];
-    $_SESSION['player_equipment']['Chest'];
-    $_SESSION['player_equipment']['Right Hand'];
-    $_SESSION['player_equipment']['Left Hand'];
-    $_SESSION['player_equipment']['Legs'];
-    $_SESSION['player_equipment']['Boots'];
-
 }
 
 function displayActions()
 {
+    // TODO: Randomly generate enemies to kill on a quest or have people encounter them when they leave town
     if ($_SESSION['player_in_town'])
     {
         echo '<tr>

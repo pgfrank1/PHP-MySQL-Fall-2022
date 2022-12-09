@@ -124,7 +124,7 @@
                 </div>
                 <div class="col-8 p-4 position-relative" style="overflow: scroll; max-height: 70vh;">
                     <?php
-                        theGameOutput();
+                    theGameOutput();
                     ?>
                     <div id="bottom_of_dialogue"></div>
                 </div>
@@ -133,24 +133,9 @@
                 <div class="col-4 p-2">
                     <h2 class="text-center">Inventory</h2>
                     <table class="table table-bordered border-light text-center m-auto bg-primary">
-                        <tr>
-                        <?php
-                        $max_of_three_columns = 0;
-                        foreach($_SESSION['player_inventory'] as $key=>$value)
-                        {
-                            if ($max_of_three_columns == 3){
-                            ?>
-                        </tr>
-                        <tr>
-                            <?php
-                            }
-                        ?>
-                            <td class="text-light bg-primary"><?= $value ?> <?= $key ?></td>
-                        <?php
-                        $max_of_three_columns++;
-                        }
-                        ?>
-                        </tr>
+                    <?php
+                    echo displayInventory();
+                    ?>
                     </table>
                 </div>
                 <div class="col-4 p-2">
@@ -164,9 +149,9 @@
                 <div class="col-4 p-2">
                     <h2 class="text-center">Actions</h2>
                     <table class="table table-bordered border-light text-center m-auto bg-primary">
-                        <?php
-                        echo displayActions();
-                        ?>
+                    <?php
+                    echo displayActions();
+                    ?>
                     </table>
                 </div>
         </div>
