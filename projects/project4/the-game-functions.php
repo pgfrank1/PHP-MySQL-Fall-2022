@@ -52,7 +52,8 @@ function calculateNewPlayerInformation($newPlayerClass)
     $_SESSION['new_player_start'] = true;
     $_SESSION['output_dialogue'] = '';
 
-    $_SESSION['player_gold'] = 100;
+    $_SESSION['player_inventory'] = array();
+    $_SESSION['player_inventory']['Gold'] = 100;
 
 }
 
@@ -88,12 +89,49 @@ function getPlayerLocation()
     }
 }
 
-function getConsumablePrice()
-{
-}
-
 function theGameOutput()
 {
+    if (isset($_POST['purchase_consumable']))
+    {
+        $_SESSION['user_quantity'] = $_POST['consumable_quantity'];
+        $total_cost = $_SESSION['user_quantity'] * $_SESSION['consumable_value'];
+
+        if ($_SESSION['player_inventory']['Gold'] < $total_cost)
+        {
+            $_SESSION['output_dialogue'] .= '<p>Cannot make purchase, you don\'t have enough gold</p>';
+        }
+        else
+        {
+            $_SESSION['player_inventory']['Gold'] -= $total_cost;
+            $_SESSION['output_dialogue'] .= '<p>You have paid '. $total_cost .' gold for ' . $_SESSION['user_quantity'] . ' ' . $_SESSION['consumable_name'] .'s.</p>';
+            if (key_exists($_SESSION['consumable_name'], $_SESSION['player_inventory']))
+            {
+                $_SESSION['player_inventory'][$_SESSION['consumable_name']] += $_SESSION['user_quantity'];
+            }
+            else
+            {
+                $_SESSION['player_inventory'][$_SESSION['consumable_name']] = $_SESSION['user_quantity'];
+            }
+        }
+    }
+    elseif (isset($_POST['purchase_item']))
+    {
+        //$_SESSION['user_quantity'] = $_POST['consumable_quantity'];
+        $total_cost = $_SESSION['item_value'];
+
+        if ($_SESSION['player_inventory']['Gold'] < $total_cost)
+        {
+            $_SESSION['output_dialogue'] .= '<p>Cannot make purchase, you don\'t have enough gold</p>';
+        }
+        else
+        {
+            $_SESSION['player_inventory']['Gold'] -= $total_cost;
+            $_SESSION['output_dialogue'] .= '<p>You have paid '. $total_cost .' gold for ' . $_SESSION['user_quantity'] . ' ' . $_SESSION['item_name'] .'.</p>';
+
+        }
+    }
+
+
     if(isset($_GET['purchaseConsumableId']))
     {
         $query = "SELECT * FROM Project4.Consumables WHERE ConsumableId = ?";
@@ -118,22 +156,22 @@ function theGameOutput()
         }
         elseif ($_SESSION['player_in_town'])
         {
-            $_SESSION['output_dialogue'] .= '<p>You enter the town. You can go to the tavern for quests and rewards, the smithy to buy better gear, and the apothecary to stock up on potions.</p>';
+            $_SESSION['output_dialogue'] .= '<p>You are in the town. You can go to the tavern for quests and rewards, the smithy to buy better gear, and the apothecary to stock up on potions.</p>';
             echo $_SESSION['output_dialogue'];
         }
         elseif ($_SESSION['player_in_tavern'])
         {
-            $_SESSION['output_dialogue'] .= '<p>You enter the tavern. You can go to the job board to look at available quests and their rewards</p>';
+            $_SESSION['output_dialogue'] .= '<p>You are in the tavern. You can go to the job board to look at available quests and their rewards</p>';
             echo $_SESSION['output_dialogue'];
         }
         elseif ($_SESSION['player_in_smithy'])
         {
-            $_SESSION['output_dialogue'] .= '<p>You enter the smithy. You can buy weapons and armor here</p>';
+            $_SESSION['output_dialogue'] .= '<p>You are in the smithy. You can buy weapons and armor here</p>';
             echo $_SESSION['output_dialogue'];
         }
         elseif ($_SESSION['player_in_apothecary'])
         {
-            $_SESSION['output_dialogue'] .= '<p>You enter the apothecary. You can buy potions for your health, mana, stamina and even attribute boosts.</p>';
+            $_SESSION['output_dialogue'] .= '<p>You are in the apothecary. You can buy potions for your health, mana, stamina and even attribute boosts.</p>';
             echo $_SESSION['output_dialogue'];
         }
     }
@@ -218,55 +256,4 @@ function displayActions()
             echo '</tr>';
         }
     }
-}
-
-function getPlayerStrength()
-{
-    $query = "SELECT Strength FROM Project4.Classes";
-
-    $result_class_strength = mysqli_query(DBC, $query)
-        or trigger_error("There was an issue while querying the database", E_USER_ERROR);
-
-    if (mysqli_num_rows($result_class_strength))
-    {
-        $query = "SELECT Strength FROM Project4.Player_Class";
-
-        $result_player_strength = mysqli_query(DBC, $query)
-            or trigger_error("There was an issue while querying the database", E_USER_ERROR);
-
-        if (mysqli_num_rows($result_player_strength))
-        {
-            return mysqli_fetch_assoc($result_class_strength)['Strength'];
-        }
-    }
-}
-
-function getPlayerPerception()
-{
-
-}
-
-function getPlayerEndurance()
-{
-
-}
-
-function getPlayerCharisma()
-{
-
-}
-
-function getPlayerIntelligence()
-{
-
-}
-
-function getPlayerAgility()
-{
-
-}
-
-function getPlayerLuck()
-{
-
 }

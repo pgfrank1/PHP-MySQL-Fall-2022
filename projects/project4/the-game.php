@@ -23,7 +23,6 @@
         $_SESSION['player_current_mana'] = $_SESSION['player_max_mana'];
         $_SESSION['player_current_stamina'] = $_SESSION['player_max_stamina'];
     }
-
     getPlayerLocation();
 ?>
 
@@ -125,7 +124,7 @@
                 </div>
                 <div class="col-8 p-4 position-relative" style="overflow: scroll; max-height: 70vh;">
                     <?php
-                        echo theGameOutput();
+                        theGameOutput();
                     ?>
                     <div id="bottom_of_dialogue"></div>
                 </div>
@@ -134,47 +133,15 @@
                 <div class="col-4 p-2">
                     <h2 class="text-center">Inventory</h2>
                     <table class="table table-bordered border-light text-center m-auto bg-primary">
-                        <tr class="m-auto">
-                            <td class="bg-light"><?= $_SESSION['player_gold']?> gold</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
                         <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
+                        <?php
+                        foreach($_SESSION['player_inventory'] as $key=>$value)
+                        {
+                        ?>
+                            <td class="bg-light"><?= $value ?> <?= $key ?></td>
+                        <?php
+                        }
+                        ?>
                         </tr>
                     </table>
                 </div>
