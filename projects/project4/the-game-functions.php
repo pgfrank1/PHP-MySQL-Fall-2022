@@ -124,12 +124,11 @@ function setInventoryAndEquipment()
                             $placeholder = $_SESSION['player_equipment']['Head'];
                             $_SESSION['player_equipment']['Head'] = $row['Name'];
                             unset($_SESSION['player_inventory'][$row['Name']]);
-                            unset($_SESSION['player_inventory'][$placeholder]);
-                            //$_SESSION['player_inventory'][$placeholder] = 1;
+                            $_SESSION['player_inventory'][$placeholder] += 1;
                             $_SESSION['output_dialogue'] .= 'You equip the 2' . $row['Name'];
 
                         }
-                        elseif ($_SESSION['player_inventory'][$row['Name']] > 1)
+                        else
                         {
                             $_SESSION['player_inventory'][$row['Name']] -= 1;
                             $_SESSION['player_inventory'][$_SESSION['player_equipment']['Head']] = 1;
