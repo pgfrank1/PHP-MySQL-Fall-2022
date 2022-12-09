@@ -58,12 +58,13 @@ function calculateNewPlayerInformation($newPlayerClass)
     $_SESSION['player_equipment'] = array();
     $_SESSION['player_equipment']['Head'];
     $_SESSION['player_equipment']['Chest'];
-    $_SESSION['player_equipment']['Right Hand'];
-    $_SESSION['player_equipment']['Left Hand'];
+    $_SESSION['player_equipment']['Right Arm'];
+    $_SESSION['player_equipment']['Left Arm'];
     $_SESSION['player_equipment']['Legs'];
     $_SESSION['player_equipment']['Boots'];
-    $_SESSION['player_defence'] = 0;
 
+    $_SESSION['player_defence'] = 0;
+    $_SESSION['player_attack_strength'] = 0;
 }
 
 function getPlayerLocation()
@@ -100,43 +101,56 @@ function getPlayerLocation()
 
 function setInventoryAndEquipment()
 {
-    if (isset($_GET['equipItemId']))
-    {
-        $query = "SELECT * FROM Project4.Items WHERE ItemId = ?";
+    $query = "SELECT * FROM Project4.Items WHERE ItemId = ?";
 
-        $result = parameterizedQuery(DBC, $query, 's', $_GET['equipItemId'])
+    $result = parameterizedQuery(DBC, $query, 's', $_GET['equipItemId'])
         or trigger_error(mysqli_error(DBC), E_USER_ERROR);
 
+    $row = mysqli_fetch_assoc($result);
+
+    if (isset($_GET['equipItemId']))
+    {
         if (mysqli_num_rows($result) == 1)
         {
-            $row = mysqli_fetch_assoc($result);
-            // TODO: Finish switch statement for equipment and be able to remove them from the inventory array
-            switch ($row['Equip_Slot']):
-                case 'Head':
-                    if($_SESSION['player_equipment']['Head'] == $row['Name'])
-                    {
-                        $_SESSION['output_dialogue'] .= 'You equip the 1' . $row['Name'];
-                    }
-                    else
-                    {
-                        if ($_SESSION['player_inventory'][$row['Name']] == 1)
-                        {
-                            $placeholder = $_SESSION['player_equipment']['Head'];
-                            $_SESSION['player_equipment']['Head'] = $row['Name'];
-                            unset($_SESSION['player_inventory'][$row['Name']]);
-                            $_SESSION['player_inventory'][$placeholder] += 1;
-                            $_SESSION['output_dialogue'] .= 'You equip the 2' . $row['Name'];
+            $current_item = $_SESSION['player_equipment'][$row['Equip_Slot']];
+            $item_to_equip = $row['Name'];
 
-                        }
-                        else
-                        {
-                            $_SESSION['player_inventory'][$row['Name']] -= 1;
-                            $_SESSION['player_inventory'][$_SESSION['player_equipment']['Head']] = 1;
-                            $_SESSION['player_equipment']['Head'] = $row['Name'];
-                            $_SESSION['output_dialogue'] .= 'You equip the 3' . $row['Name'];
-                        }
-                    }
-            endswitch;
+            if ($current_item == null)
+            {
+                $_SESSION['player_equipment'][$row['Equip_Slot']] = $item_to_equip;
+                $_SESSION['player_defence'] += $row['Defence'];
+                $_SESSION['player_attack_strength'] += $row['AttackStrength'];
+
+                if ($_SESSION['player_inventory'][$item_to_equip] > 1)
+                {
+                    $_SESSION['player_inventory'][$item_to_equip] -= 1;
+                }
+                else
+                {
+                    unset($_SESSION['player_inventory'][$item_to_equip]);
+                }
+            }
+            else
+            {
+                if ($_SESSION['player_inventory'][$item_to_equip] > 1)
+                {
+                    $_SESSION['player_equipment'][$row['Equip_Slot']] = $item_to_equip;
+                    $_SESSION['player_inventory'][$item_to_equip] -= 1;
+                }
+                else
+                {
+                    $_SESSION['player_equipment'][$row['Equip_Slot']] = $item_to_equip;
+                    unset($_SESSION['player_inventory'][$item_to_equip]);
+                }
+                if(key_exists($current_item, $_SESSION['player_inventory']))
+                {
+                    $_SESSION['player_inventory'][$current_item] += 1;
+                }
+                else
+                {
+                    $_SESSION['player_inventory'][$current_item] = 1;
+                }
+            }
         }
     }
 }
@@ -288,9 +302,9 @@ function displayEquipment()
         <td></td>
     </tr>
     <tr>
-        <td class="text-light">Left Hand<br><?= $_SESSION['player_equipment']['Left Hand'] ?></td>
+        <td class="text-light">Left Arm<br><?= $_SESSION['player_equipment']['Left Arm'] ?></td>
         <td class="text-light">Chest<br><?= $_SESSION['player_equipment']['Chest'] ?></td>
-        <td class="text-light">Right Hand<br?<?= $_SESSION['player_equipment']['Right Hand'] ?></td>
+        <td class="text-light">Right Arm<br><?= $_SESSION['player_equipment']['Right Arm'] ?></td>
     </tr>
     <tr>
         <td class="text-light"></td>

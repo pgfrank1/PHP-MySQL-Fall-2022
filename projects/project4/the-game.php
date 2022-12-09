@@ -97,6 +97,14 @@
                         <tr>
                             <td colspan="2"><?= $_SESSION['player_luck'] ?></td>
                         </tr>
+                        <tr>
+                            <th>Player Defence</th>
+                            <th>Player Attack Strength</th>
+                        </tr>
+                        <tr>
+                            <td><?= $_SESSION['player_defence'] ?></td>
+                            <td><?= $_SESSION['player_attack_strength'] ?></td>
+                        </tr>
                     </table>
                     <a href="save-account.php" class="d-block btn btn-danger">Save Account</a>
                     <br>
