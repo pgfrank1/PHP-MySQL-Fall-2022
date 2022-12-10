@@ -57,11 +57,23 @@ function calculateNewPlayerInformation($newPlayerClass)
 
     $_SESSION['player_equipment'] = array();
     $_SESSION['player_equipment']['Head'];
+    $_SESSION['player_equipment']['Head']['Defence'];
+    $_SESSION['player_equipment']['Head']['AttackStrength'];
     $_SESSION['player_equipment']['Chest'];
+    $_SESSION['player_equipment']['Chest']['Defence'];
+    $_SESSION['player_equipment']['Chest']['AttackStrength'];
     $_SESSION['player_equipment']['Right Arm'];
+    $_SESSION['player_equipment']['Right Arm']['Defence'];
+    $_SESSION['player_equipment']['Right Arm']['AttackStrength'];
     $_SESSION['player_equipment']['Left Arm'];
+    $_SESSION['player_equipment']['Left Arm']['Defence'];
+    $_SESSION['player_equipment']['Left Arm']['AttackStrength'];
     $_SESSION['player_equipment']['Legs'];
+    $_SESSION['player_equipment']['Legs']['Defence'];
+    $_SESSION['player_equipment']['Legs']['AttackStrength'];
     $_SESSION['player_equipment']['Boots'];
+    $_SESSION['player_equipment']['Boots']['Defence'];
+    $_SESSION['player_equipment']['Boots']['AttackStrength'];
 
     $_SESSION['player_defence'] = 0;
     $_SESSION['player_attack_strength'] = 0;
@@ -121,6 +133,7 @@ function setInventoryAndEquipment()
                 $_SESSION['player_defence'] += $row['Defence'];
                 $_SESSION['player_attack_strength'] += $row['AttackStrength'];
 
+
                 if ($_SESSION['player_inventory'][$item_to_equip] > 1)
                 {
                     $_SESSION['player_inventory'][$item_to_equip] -= 1;
@@ -132,6 +145,20 @@ function setInventoryAndEquipment()
             }
             else
             {
+                $query2 = "SELECT * FROM Project4.Items WHERE `Name` = ?";
+
+                $result2 = parameterizedQuery(DBC, $query2, 's', $current_item)
+                    or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+                $row2 = mysqli_fetch_assoc($result2);
+
+                $_SESSION['player_defence'] -= $row2['Defence'];
+                $_SESSION['player_attack_strength'] -= $row2['AttackStrength'];
+
+
+                $_SESSION['player_defence'] += $row['Defence'];
+                $_SESSION['player_attack_strength'] += $row['AttackStrength'];
+
                 if ($_SESSION['player_inventory'][$item_to_equip] > 1)
                 {
                     $_SESSION['player_equipment'][$row['Equip_Slot']] = $item_to_equip;
