@@ -106,8 +106,6 @@
                             <td><?= $_SESSION['player_attack_strength'] ?></td>
                         </tr>
                     </table>
-                    <a href="save-account.php" class="d-block btn btn-danger">Save Account</a>
-                    <br>
                     <?php
                     if (!empty($_SESSION['admin_user_name']))
                     {

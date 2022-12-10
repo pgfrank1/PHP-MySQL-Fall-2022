@@ -24,7 +24,7 @@ require_once("query-utils.php");
 ?>
 <main>
     <div class="container">
-        <h1 class="text-center">Admin Control <a class="btn btn-primary" href="./the-game.php">Return to the game</a></h1>
+        <h1 class="text-center">Admin Control <a class="btn btn-primary" href="./the-game.php#bottom_of_dialogue">Return to the game</a></h1>
         <div class="row row-cols-3 p-0">
             <form class="needs-validation bg-light p-4 col-6 col-md-4 my-1 border border-secondary h-100" novalidate method="post" action="<?= $_SERVER['PHP_SELF']?>">
                 <h2 class="text-center mb-4 h-25">Create New Admin</h2>

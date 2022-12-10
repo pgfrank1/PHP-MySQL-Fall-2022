@@ -4,6 +4,20 @@ require_once('dbconnection.php');
 require_once('query-utils.php');
 require_once('purchase-functions.php');
 
+if(isset($_SESSION['Enemy']['EnemyHealth'])) {
+    if ($_SESSION['Enemy']['EnemyHealth'] <= 0)
+    {
+        $_SESSION['Enemy']['IsItDead'] = true;
+        $_SESSION['output_dialogue'] .= '<p>You have slain the enemy!</p>';
+        $_SESSION['player_in_town'] = true;
+        $_SESSION['player_on_quest'] = false;
+        $gold_gained = rand(1, $_SESSION['Enemy']['Experience']);
+        $_SESSION['player_inventory']['Gold'] += $gold_gained;
+        $_SESSION['output_dialogue'] .= '<p>You managed to get '. $gold_gained .' gold. You head back to town</p>';
+        getPlayerLocation();
+        unset($_SESSION['Enemy']);
+    }
+}
 
 function getAllClassesForPlayer()
 {
@@ -77,6 +91,8 @@ function calculateNewPlayerInformation($newPlayerClass)
 
     $_SESSION['player_defence'] = 0;
     $_SESSION['player_attack_strength'] = 0;
+
+    $_SESSION['attack_count'] = 0;
 }
 
 function getPlayerLocation()
@@ -87,6 +103,9 @@ function getPlayerLocation()
         $_SESSION['player_in_town'] = false;
         $_SESSION['player_in_smithy'] = false;
         $_SESSION['player_in_apothecary'] = false;
+        $_SESSION['player_on_quest'] = false;
+        unset($_SESSION['Enemy']);
+        unset($_SESSION['attack_count']);
     }
     elseif (isset($_GET['goToSmithy']))
     {
@@ -94,6 +113,9 @@ function getPlayerLocation()
         $_SESSION['player_in_town'] = false;
         $_SESSION['player_in_smithy'] = true;
         $_SESSION['player_in_apothecary'] = false;
+        $_SESSION['player_on_quest'] = false;
+        unset($_SESSION['Enemy']);
+        unset($_SESSION['attack_count']);
     }
     if (isset($_GET['goToApothecary']))
     {
@@ -101,6 +123,9 @@ function getPlayerLocation()
         $_SESSION['player_in_town'] = false;
         $_SESSION['player_in_smithy'] = false;
         $_SESSION['player_in_apothecary'] = true;
+        $_SESSION['player_on_quest'] = false;
+        unset($_SESSION['Enemy']);
+        unset($_SESSION['attack_count']);
     }
     if (isset($_GET['goToTown']))
     {
@@ -108,6 +133,37 @@ function getPlayerLocation()
         $_SESSION['player_in_town'] = true;
         $_SESSION['player_in_smithy'] = false;
         $_SESSION['player_in_apothecary'] = false;
+        $_SESSION['player_on_quest'] = false;
+        unset($_SESSION['Enemy']);
+        unset($_SESSION['attack_count']);
+    }
+    elseif (isset($_GET['goOnAQuest']))
+    {
+        if(!isset($_SESSION['Enemy']['EnemyName']))
+        {
+        $_SESSION['player_in_tavern'] = false;
+        $_SESSION['player_in_town'] = false;
+        $_SESSION['player_in_smithy'] = false;
+        $_SESSION['player_in_apothecary'] = false;
+        $_SESSION['player_on_quest'] = true;
+
+        $query = "SELECT * FROM Project4.Enemies order by RAND() LIMIT 1";
+
+        $result = mysqli_query(DBC, $query)
+        or trigger_error(mysqli_error(DBC), E_USER_ERROR);
+
+        $row = mysqli_fetch_assoc($result);
+
+        $_SESSION['output_dialogue'] .= '<p>You leave town in search of adventure</p>';
+
+        $_SESSION['output_dialogue'] .= '<p>You encounter some ' . $row['EnemyName'] . '</p>';
+
+            $_SESSION['Enemy']['EnemyName'] = $row['EnemyName'];
+            $_SESSION['Enemy']['EnemyHealth'] = $row['EnemyHealth'];
+            $_SESSION['Enemy']['Experience'] = $row['Experience'];
+            $_SESSION['Enemy']['AttackStrength'] = $row['Strength'];
+            $_SESSION['Enemy']['IsItDead'] = false;
+        }
     }
 }
 
@@ -130,9 +186,9 @@ function setInventoryAndEquipment()
             if ($current_item == null)
             {
                 $_SESSION['player_equipment'][$row['Equip_Slot']] = $item_to_equip;
+                $_SESSION['output_dialogue'] .= '<p>You have equipped a '. $item_to_equip .'</p>';
                 $_SESSION['player_defence'] += $row['Defence'];
                 $_SESSION['player_attack_strength'] += $row['AttackStrength'];
-
 
                 if ($_SESSION['player_inventory'][$item_to_equip] > 1)
                 {
@@ -177,6 +233,8 @@ function setInventoryAndEquipment()
                 {
                     $_SESSION['player_inventory'][$current_item] = 1;
                 }
+
+                $_SESSION['output_dialogue'] .= '<p>You have equipped a '. $item_to_equip .'</p>';
             }
         }
     }
@@ -184,6 +242,28 @@ function setInventoryAndEquipment()
 
 function theGameOutput()
 {
+    if ($_SESSION['player_on_quest'])
+    {
+        if(isset($_GET['attack'.$_SESSION['attack_count']]))
+        {
+            $_SESSION['output_dialogue'] .= '<p>You attack the enemy!</p>';
+
+            $damage =  rand(1, $_SESSION['player_attack_strength']);
+
+            $enemy_damage = rand(1, $_SESSION['Enemy']['AttackStrength']);
+
+            $_SESSION['Enemy']['EnemyHealth'] -= $damage;
+            $_SESSION['player_current_health'] -= $enemy_damage;
+
+            $_SESSION['output_dialogue'] .= '<p>You did '.$damage.' damage. Enemy has ' . $_SESSION['Enemy']['EnemyHealth']  . ' health</p>';
+
+            $_SESSION['output_dialogue'] .= '<p>Enemy did ' .$enemy_damage.' damage. You have ' .$_SESSION['player_current_health']. ' health</p>';
+
+        }
+        echo $_SESSION['output_dialogue'];
+
+    }
+
     if (isset($_POST['purchase_consumable']))
     {
         $_SESSION['user_quantity'] = $_POST['consumable_quantity'];
@@ -229,6 +309,11 @@ function theGameOutput()
                 $_SESSION['player_inventory'][$_SESSION['item_name']] = $_SESSION['user_quantity'];
             }
         }
+    }
+
+    if (isset($_SESSION['Enemy']['EnemyHealth'] ))
+    {
+
     }
 
 
@@ -351,7 +436,7 @@ function displayActions()
     // TODO: Randomly generate enemies to kill on a quest or have people encounter them when they leave town
     if ($_SESSION['player_in_town'])
     {
-        echo '<tr>
+        ?>    <tr>
                 <td class="text-light">
                     <a class="text-light decoration-none" href="the-game.php?goToTavern#bottom_of_dialogue">Go to Tavern</a>
                 </td>
@@ -363,22 +448,25 @@ function displayActions()
                 </td>
               </tr>
               <tr>
-              </tr>';
-
+              </tr><?php
     }
     elseif ($_SESSION['player_in_tavern'])
-    {
-        echo '<tr>
-                <td class="text-light">
-                    <a class="text-light decoration-none" href="the-game.php?goToTown#bottom_of_dialogue">Go to Town</a>
-                </td>
-                <td class="text-light">
-                    <a class="text-light decoration-none" href="the-game.php?goToSmithy#bottom_of_dialogue">Go to Smithy</a>
-                </td>
-                <td class="text-light">
-                    <a class="text-light decoration-none" href="the-game.php?goToApothecary#bottom_of_dialogue">Go to Apothecary</a>
-                </td>
-              </tr>';
+    {?>
+        <tr>
+            <td class="text-light">
+                <a class="text-light decoration-none" href="the-game.php?goToTown#bottom_of_dialogue">Go to Town</a>
+            </td>
+            <td class="text-light">
+                <a class="text-light decoration-none" href="the-game.php?goToSmithy#bottom_of_dialogue">Go to Smithy</a>
+            </td>
+            <td class="text-light">
+                <a class="text-light decoration-none" href="the-game.php?goToApothecary#bottom_of_dialogue">Go to Apothecary</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><a class="text-light" href="the-game.php?goOnAQuest#bottom_of_dialogue">Go on a Quest!</a></td>
+        </tr>
+    <?php
     }
     elseif ($_SESSION['player_in_smithy'])
     {
@@ -387,7 +475,8 @@ function displayActions()
         $result = mysqli_query(DBC, $query)
             or trigger_error(mysqli_error(DBC), E_USER_ERROR);
 
-        echo '<tr>
+        ?>
+        <tr>
                 <td class="text-light">
                     <a class="text-light decoration-none" href="the-game.php?goToTown#bottom_of_dialogue">Go to Town</a>
                 </td>
@@ -397,22 +486,28 @@ function displayActions()
                 <td class="text-light">
                     <a class="text-light decoration-none" href="the-game.php?goToApothecary#bottom_of_dialogue">Go to Apothecary</a>
                 </td>
-              </tr>';
-
+              </tr>
+        <?php
         if ($result)
         {
-            echo '<tr>';
+            ?><tr><td class="text-light" colspan="3">Purchase Items</td></tr>
+            <tr>
+            <?php
             $max_of_three_columns = 0;
             while ($row = mysqli_fetch_assoc($result))
             {
                 if ($max_of_three_columns == 3)
                 {
                     $max_of_three_columns = 0;
-                    echo '</tr><tr>';
+                    ?>
+                    </tr><tr>
+                    <?php
                 }
-                echo '<td class="text-light">
-                            <a class="text-light" href="the-game.php?purchaseItemId=' . $row['ItemId'] . '#bottom_of_dialogue">' . $row['Name'] . '</a>
-                        </td>';
+                ?>
+                    <td class="text-light">
+                        <a class="text-light" href="the-game.php?purchaseItemId=<?=$row['ItemId']?>#bottom_of_dialogue"><?=$row['Name']?></a>
+                    </td>
+                <?php
                 $max_of_three_columns++;
             }
             echo '</tr>';
@@ -456,5 +551,19 @@ function displayActions()
             }
             echo '</tr>';
         }
+    }
+    elseif ($_SESSION['player_on_quest'])
+    {
+        $_SESSION['attack_count']++;
+        ?>
+        <tr>
+            <td>
+                <a class="text-light decoration-none" href="the-game.php?attack<?=$_SESSION['attack_count']?>#bottom_of_dialogue" target="_self">Attack Enemy</a>
+            </td>
+            <td>
+                <a class="text-light decoration-none" href="the-game.php?goToTown#bottom_of_dialogue">Run Away</a>
+            </td>
+        </tr><?php
+
     }
 }
