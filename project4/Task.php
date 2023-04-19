@@ -43,7 +43,7 @@ switch ($http_verb)
     case "DELETE":
         parse_str(file_get_contents("php://input"), $delete_vars);
 
-        if (isset($delete_vars['id']));
+        if (isset($delete_vars['id']))
         {
             $task_manager->delete($delete_vars['id']);
         }
@@ -55,5 +55,4 @@ switch ($http_verb)
     default:
         throw new Exception("Unsupported HTTP request");
         break;
-
 }

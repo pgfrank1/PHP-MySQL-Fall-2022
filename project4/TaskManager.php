@@ -84,7 +84,6 @@ class TaskManager implements ITaskManager
             throw new Exception("Failed to delete the task");
         }
     }
-
     public function db_connect(): PDO {
         $host = '127.0.0.1';
         $db_name = 'PROJECT4';
