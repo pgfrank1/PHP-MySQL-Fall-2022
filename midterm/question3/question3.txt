@@ -1,0 +1,12 @@
+1) You need Linux, Apache, MySQL, and PHP to make a full LAMP stack.
+2) sudo apt install apache2
+   sudo apt install mysql-server
+   sudo apt install php libapache2-mod-php php-mysql
+   sudo systemctl restart apache2
+3) We do not have access permissions to place new files in the folder
+4) You can give yourself full access permissions to the folder or use the sudo command to make
+   a new file.
+5) When you have a fresh install of Apache, it does not output the error messages until you
+   change the Apache settings.
+6) Change the variable within the php.ini file, display_errors = on
+7) sudo systemctl restart apache2
