@@ -11,78 +11,80 @@ class TaskManager implements ITaskManager
         $this->pdo = $this->db_connect();
     }
 
-    public function create($desc): false|string
+    public function create($desc): false|string|null
     {
-        $stmt = $this->pdo->prepare("INSERT INTO Task (description) VALUES (:desc)");
-        $stmt->bindParam(":desc", $desc);
-
-        if ($stmt->execute())
+        $return_value= NULL;
+        try {
+            $stmt = $this->pdo->prepare("INSERT INTO Task (description) VALUES (:desc)");
+            $stmt->execute(array(":desc"=>$desc));
+            $return_value = $this->pdo->lastInsertId();
+        } catch (Exception $e)
         {
-            return $this->pdo->lastInsertId();
+            echo "{$e->getMessage()}<br/>\n";
         }
-        else
-        {
-            throw new Exception("Failed to create the task");
-        }
+        return $return_value;
     }
 
-    public function read($id)
+    public function read($id): false|string|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM Task WHERE id = :id");
-        $stmt->bindParam(":id", $id);
-        if ($stmt->execute())
+        $return_value= NULL;
+        try {
+            $stmt = $this->pdo->prepare("SELECT * FROM Task WHERE id = :id");
+            $stmt->execute(array(":id"=>$id));
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $return_value = json_encode($results, JSON_PRETTY_PRINT);
+        } catch (Exception $e)
         {
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($result)
-            {
-                return $result;
-            }
-            else
-            {
-                throw new Exception("No task found with the ID: $id");
-            }
+            echo "{$e->getMessage()}<br/>\n";
         }
-        else
-        {
-            throw new Exception("Failed to read the task");
-        }
+        return $return_value;
     }
 
-    public function readAll()
+    public function readAll(): false|array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM Task");
-        if ($stmt->execute())
+        $return_value= NULL;
+        try
         {
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        else
+            $stmt = $this->pdo->prepare("SELECT * FROM User");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $return_value = json_encode($results);
+
+        } catch (Exception $e)
         {
-            throw new Exception("Failed to read all the tasks");
+            echo "{$e->getMessage()}<br/>\n";
         }
+        return $return_value;
     }
 
-    public function update($id, $newDesc)
+    public function update($id, $newDesc): ?int
     {
-        $stmt = $this->pdo->prepare("UPDATE Task SET description = :newDesc WHERE id = :id");
-        $stmt->bindParam(":id", $id);
-        $stmt->bindParam(":newDesc", $newDesc);
-
-        if ($stmt->execute()) {
-            return $stmt->rowCount();
-        } else {
-            throw new Exception("Failed to update the task");
+        $return_value= NULL;
+        try {
+            $stmt = $this->pdo->prepare("UPDATE Task SET description = :newDesc WHERE id = :id");
+            $stmt->execute(array(":id"=>$id, ":newDesc"=>$newDesc));
+            $return_value = $stmt->rowCount();
+        } catch (Exception $e)
+        {
+            echo "{$e->getMessage()}<br/>\n";
         }
+        return $return_value;
     }
 
-    public function delete($id)
+    public function delete($id): ?int
     {
-        $stmt = $this->pdo->prepare("DELETE FROM Task WHERE id = :id");
-        $stmt->bindParam(":id", $id);
-        if ($stmt->execute()) {
-            return $stmt->rowCount();
-        } else {
-            throw new Exception("Failed to delete the task");
+        $return_value= NULL;
+        try {
+            $stmt = $this->pdo->prepare("DELETE FROM Task WHERE id = :id");
+            $stmt->execute(array(":id"=>$id));
+            $return_value = $stmt->rowCount();
+        } catch (Exception $e)
+        {
+            echo "{$e->getMessage()}<br/>\n";
         }
+        return $return_value;
     }
     public function db_connect(): PDO {
         $host = '127.0.0.1';

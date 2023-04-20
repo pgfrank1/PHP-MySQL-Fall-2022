@@ -12,7 +12,8 @@ class UserManager implements IUserManager
     public function create($username, $password): false|string|null
     {
         $return_value= NULL;
-        try {
+        try
+        {
             $stmt = $this->pdo->prepare("INSERT INTO User (username, hashed_password, created, api_key) "
                 . "VALUES (:username, :password, CURRENT_TIMESTAMP, :api_key)");
             $password_hash = $this->hash_password($password);
@@ -30,7 +31,8 @@ class UserManager implements IUserManager
     public function read($id): false|string|null
     {
         $return_value= NULL;
-        try {
+        try
+        {
             $stmt = $this->pdo->prepare("SELECT * FROM User WHERE id = :id");
             $stmt->execute(array(":id"=>$id));
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -47,7 +49,8 @@ class UserManager implements IUserManager
     public function readAll(): false|array
     {
         $return_value= NULL;
-        try {
+        try
+        {
             $stmt = $this->pdo->prepare("SELECT * FROM User");
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -64,7 +67,8 @@ class UserManager implements IUserManager
     public function updatePassword($id, $newPassword): ?int
     {
         $return_value= NULL;
-        try {
+        try
+        {
             $password_hash = $this->hash_password($newPassword);
             $stmt = $this->pdo->prepare("UPDATE User SET hashed_password = :password WHERE id = :id");
             $stmt->execute(array(":password"=>$password_hash));
@@ -79,7 +83,8 @@ class UserManager implements IUserManager
     public function updateApiKey($id): ?int
     {
         $return_value= NULL;
-        try {
+        try
+        {
             $new_api_key = $this->generate_api_key();
             $stmt = $this->pdo->prepare("UPDATE User SET api_key = :api_key WHERE id = :id");
             $stmt->execute(array(":api_key"=>$new_api_key));
@@ -95,7 +100,8 @@ class UserManager implements IUserManager
     public function delete($id): ?int
     {
         $return_value= NULL;
-        try {
+        try
+        {
             $stmt = $this->pdo->prepare("DELETE FROM User WHERE id = :id");
             $stmt->execute(array(":id"=>$id));
             $return_value = $stmt->rowCount();
