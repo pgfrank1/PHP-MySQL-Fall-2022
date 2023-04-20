@@ -1,6 +1,6 @@
 <?php
 
-require_once '.\TaskManager.php';
+require_once ('./TaskManager.php');
 
 $http_verb = $_SERVER['REQUEST_METHOD'];
 $task_manager = new TaskManager();
