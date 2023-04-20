@@ -54,5 +54,4 @@ switch ($http_verb)
         break;
     default:
         throw new Exception("Unsupported HTTP request");
-        break;
 }
