@@ -1,6 +1,6 @@
 <?php
 
-require_once ".\ITaskManager.php";
+require_once "./ITaskManager.php";
 
 class TaskManager implements ITaskManager
 {
